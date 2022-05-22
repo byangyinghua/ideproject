@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- -->
+<mapper namespace="LivePlay">
+	<resultMap id="LivePlayResult" type="java.util.HashMap">
+		<result column="id" property="id" jdbcType="BIGINT" />
+		<result column="live_id" property="live_id" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="attach_id" property="attach_id"
+			jdbcType="VARCHAR" />
+		<result column="attach_name" property="attach_name"
+			jdbcType="VARCHAR" />
+		<result column="start_time" property="start_time"
+			jdbcType="VARCHAR" />
+		<result column="creator" property="creator"
+			jdbcType="VARCHAR" />
+		<result column="creator_uid" property="creator_uid"
+			jdbcType="VARCHAR" />
+		<result column="create_time" property="create_time"
+			jdbcType="DATE" />
+	</resultMap>
+	<resultMap id="LivePlayResultEntity"
+		type="bzl.entity.LivePlay">
+	<result column="id" property="id" jdbcType="BIGINT" />
+		<result column="live_id" property="live_id" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="attach_id" property="attach_id"
+			jdbcType="VARCHAR" />
+		<result column="attach_name" property="attach_name"
+			jdbcType="VARCHAR" />
+		<result column="start_time" property="start_time"
+			jdbcType="VARCHAR" />
+		<result column="creator" property="creator"
+			jdbcType="VARCHAR" />
+		<result column="creator_uid" property="creator_uid"
+			jdbcType="VARCHAR" />
+		<result column="create_time" property="create_time"
+			jdbcType="DATE" />
+	</resultMap>
+	<parameterMap id="LivePlayParam" type="java.util.HashMap">
+	</parameterMap>
+	<parameterMap id="LivePlayEntity"
+		type="bzl.entity.LivePlay">
+	</parameterMap>
+	<sql id="mysql">
+		id,live_id,name,attach_id,attach_name,start_time,creator,creator_uid,create_time
+	</sql>
+	<select id="selectByPK" parameterMap="LivePlayParam"
+		resultMap="LivePlayResult">
+		select
+		<include refid="mysql" />
+		from t_live_play where live_id = #{live_id}
+	</select>
+	<select id="selectAll" resultMap="LivePlayResult">
+		select
+		<include refid="mysql" />
+		from t_live_play
+		<if test="sort != null">
+			order by ${sort}
+		</if>
+		<if test="order != null">
+			${order}
+		</if>
+	</select>
+	<!-- 动态查询 -->
+	<select id="selectByCondition" parameterMap="LivePlayParam"
+		resultMap="LivePlayResult">
+		select
+		<include refid="mysql" />
+		from t_live_play
+		<include refid="sqlwhere" />
+		<if test="sort != null">
+			order by ${sort}
+		</if>
+		<if test="order != null">
+			${order}
+		</if>
+	</select>
+	<!-- 动态sql -->
+	<select id="selectCountByCondition" parameterMap="LivePlayParam"
+		resultType="java.util.HashMap">
+		select count(1) count from t_live_play
+		<include refid="sqlwhere" />
+	</select>
+	<!-- 动态获得本页统计 -->
+	<select id="selectPageCountByCondition"
+		parameterMap="LivePlayParam" resultType="java.util.HashMap">
+		select count(1) count from t_live_play
+		<include refid="sqlwhere" />
+		limit ${startrom},${pagesize}
+	</select>
+	<!-- 动态分页sql -->
+	<select id="selectByConditionWithPage"
+		parameterMap="LivePlayParam" resultMap="LivePlayResult">
+		select
+		<include refid="mysql" />
+		from t_live_play
+		<include refid="sqlwhere" />
+		<if test="sort != null">
+			order by ${sort}
+		</if>
+		<if test="order != null">
+			${order}
+		</if>
+		limit ${startrom},${pagesize}
+	</select>
+	<!-- 动态统计已删除记录 -->
+	<select id="selectDelCountByCondition"
+		parameterMap="LivePlayParam" resultType="java.util.HashMap">
+		select count(1) count from t_live_play
+		<include refid="sqlwhere" />
+	</select>
+	<!-- 动态查询已删除记录分页 -->
+	<select id="selectDelByConditionWithPage"
+		parameterMap="LivePlayParam" resultMap="LivePlayResult">
+		select
+		<include refid="mysql" />
+		from t_live_play
+		<include refid="sqlwhere" />
+		<if test="sort != null">
+			order by ${sort}
+		</if>
+		<if test="order != null">
+			${order}
+		</if>
+		limit ${startrom},${pagesize}
+	</select>
+	<insert id="insert" parameterMap="LivePlayParam"
+		useGeneratedKeys="true">
+<![CDATA[
+      insert into t_live_play(live_id,name,attach_id,attach_name,start_time,creator,creator_uid,create_time) values(#{live_id},#{name},#{attach_id},#{attach_name},#{start_time},#{creator},#{creator_uid},#{create_time})
+    ]]>
+	</insert>
+	<delete id="delete" parameterMap="LivePlayParam">
+  <![CDATA[
+    delete from t_live_play where live_id = #{live_id}
+  ]]>
+	</delete>
+
+	<!-- 批量查询 -->
+	<select id="getTaskByIds" parameterMap="LivePlayParam">
+		select * from t_live_play where
+		live_id in
+		<foreach item="item" index="index" collection="live_ids"
+			open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<!-- 批量删除 -->
+	<delete id="deleteBat" parameterMap="LivePlayParam">
+		delete from t_live_play where
+		live_id in
+		<foreach item="item" index="index" collection="live_ids" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<!-- 动态更新 -->
+	<update id="update" parameterMap="LivePlayParam">
+		update t_live_play
+		<set>
+			<if test="name != null">
+				name = #{name},
+			</if>
+			<if test="attach_id != null">
+				attach_id = #{attach_id},
+			</if>
+			<if test="attach_name != null">
+				attach_name = #{attach_name},
+			</if>
+			<if test="start_time != null">
+				start_time = #{start_time},
+			</if>
+		</set>
+		where live_id = #{live_id}
+	</update>
+	<sql id="sqlwhere">
+		<trim prefix="WHERE" prefixOverrides="AND">
+				<if test="live_id != null">
+					live_id = #{live_id}
+				</if>
+				<if test="attach_id != null">
+					and attach_id = #{attach_id}
+				</if>
+				<if test="start_time != null">
+					and start_time = #{start_time}
+				</if>
+				<if test="creator != null">
+					and creator = #{creator}
+				</if>
+				<if test="creator_uid != null">
+					and creator_uid = #{creator_uid}
+				</if>
+				<if test="creator_uids != null">
+			 		and creator_uid in
+					<foreach item="item" index="index" collection="creator_uids"  open="(" separator="," close=")">
+	            		#{item}
+ 	        		</foreach>
+				</if>
+		</trim>
+	</sql>
+	<!-- 验证唯一 -->
+	<select id="judgeonly" parameterMap="LivePlayParam"
+		resultType="java.util.HashMap">
+		select distinct if(exists(select live_id from t_live_play
+		<where>
+			<if test="live_id != null">
+				live_id = #{live_id}
+			</if>
+		</where>
+
+		),1,0) as flag from t_live_play
+	</select>
+
+</mapper>

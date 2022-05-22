@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  -->
+<mapper namespace="User">
+<resultMap id="UserResult" type="java.util.HashMap">
+	<result column="id" property="id" jdbcType="INTEGER"/>
+	<result column="uid" property="uid" jdbcType="VARCHAR"/>
+	<result column="username" property="username" jdbcType="VARCHAR"/>
+	<result column="password" property="password" jdbcType="VARCHAR"/>
+	<result column="identity_num" property="identity_num" jdbcType="VARCHAR"/>
+	<result column="phone_num" property="phone_num" jdbcType="CHAR"/>
+	<result column="qq" property="qq" jdbcType="VARCHAR"/>
+	<result column="weixin" property="weixin" jdbcType="VARCHAR"/>
+	<result column="mail" property="mail" jdbcType="VARCHAR"/>
+	<result column="real_name" property="real_name" jdbcType="VARCHAR"/>
+	<result column="del_status" property="del_status" jdbcType="TINYINT"/>
+	<result column="is_supper" property="is_supper" jdbcType="TINYINT"/>
+	<result column="avatar_img" property="avatar_img" jdbcType="VARCHAR"/>
+	<result column="create_time" property="create_time" jdbcType="TIMESTAMP"/>
+	<result column="update_time" property="update_time" jdbcType="TIMESTAMP"/>
+</resultMap>
+<resultMap id="UserResultEntity" type="bzl.entity.User">
+	<result column="id" property="id" jdbcType="INTEGER"/>
+	<result column="uid" property="uid" jdbcType="VARCHAR"/>
+	<result column="username" property="username" jdbcType="VARCHAR"/>
+	<result column="password" property="password" jdbcType="VARCHAR"/>
+	<result column="identity_num" property="identity_num" jdbcType="VARCHAR"/>
+	<result column="phone_num" property="phone_num" jdbcType="CHAR"/>
+	<result column="qq" property="qq" jdbcType="VARCHAR"/>
+	<result column="weixin" property="weixin" jdbcType="VARCHAR"/>
+	<result column="mail" property="mail" jdbcType="VARCHAR"/>
+	<result column="real_name" property="real_name" jdbcType="VARCHAR"/>
+	<result column="del_status" property="del_status" jdbcType="TINYINT"/>
+	<result column="is_supper" property="is_supper" jdbcType="TINYINT"/>
+	<result column="avatar_img" property="avatar_img" jdbcType="VARCHAR"/>
+	<result column="create_time" property="create_time" jdbcType="TIMESTAMP"/>
+	<result column="update_time" property="update_time" jdbcType="TIMESTAMP"/>
+</resultMap>
+<parameterMap id="UserParam" type="java.util.HashMap">
+</parameterMap>
+<parameterMap id="UserEntity" type="bzl.entity.User">
+</parameterMap>
+<sql id="mysql">
+	id,uid,username,password,identity_num,phone_num,qq,weixin,mail,real_name,del_status,is_supper,avatar_img,create_time,update_time
+</sql>
+<select id="selectByPK" parameterMap="UserParam"
+resultMap="UserResult">
+  	 	select <include refid="mysql"/> from t_user where del_status=0 and uid = #{uid}
+</select>
+<select id="selectAll" resultMap="UserResult">
+  	select <include refid="mysql"/> from t_user where del_status=0
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+</select>
+<!-- 动态查询 -->
+<select id="selectByCondition" parameterMap="UserParam" resultMap="UserResult">
+	select <include refid="mysql"/> from t_user
+		<include refid="sqlwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+</select>
+<!-- 动态sql -->
+<select id="selectCountByCondition" parameterMap="UserParam" resultType="java.util.HashMap">
+	select count(1) count from t_user
+	<include refid="sqlwhere"/>
+</select>
+<!-- 动态获得本页统计 -->
+<select id="selectPageCountByCondition" parameterMap="UserParam" resultType="java.util.HashMap">
+	select count(1) count from userinfo
+	<include refid="sqlwhere"/>
+	limit ${startrom},${pagesize}
+	</select>
+<!-- 动态分页sql -->
+<select id="selectByConditionWithPage" parameterMap="UserParam" resultMap="UserResult">
+	select <include refid="mysql"/> from t_user
+	<include refid="sqlwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+		</if>
+	<if test="order != null">
+			${order}
+	</if>
+	limit ${startrom},${pagesize}
+</select>
+<!-- 动态统计已删除记录-->
+<select id="selectDelCountByCondition" parameterMap="UserParam" resultType="java.util.HashMap">
+	select count(1) count from t_user
+	<include refid="delwhere"/>
+</select>
+<!-- 动态查询已删除记录分页-->
+<select id="selectDelByConditionWithPage" parameterMap="UserParam" resultMap="UserResult">
+	select <include refid="mysql"/> from t_user
+	<include refid="delwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+	limit ${startrom},${pagesize}
+</select>
+<insert id="insert" parameterMap="UserParam" useGeneratedKeys="true">
+<![CDATA[
+      insert into t_user(uid,username,password,identity_num,phone_num,qq,weixin,mail,real_name,del_status,is_supper,avatar_img,create_time) values(#{uid},#{username},#{password},#{identity_num},#{phone_num},#{qq},#{weixin},#{mail},#{real_name},#{del_status},#{is_supper},#{avatar_img},#{create_time})
+    ]]>
+</insert>
+<delete id="delete" parameterMap="UserParam">
+  <![CDATA[
+    delete from t_user where username = #{username}
+  ]]>
+</delete>
+<!-- 批量删除 -->
+<delete id="deleteBat" parameterMap="UserParam">
+    delete from t_user where
+     	uid in 
+		<foreach item="item" index="index" collection="id"  open="(" separator="," close=")">
+	      #{item}
+ 	 </foreach>
+ </delete>
+<!-- 批量伪删除 -->
+<update id="updateStatus"  parameterMap="UserParam">
+    <foreach collection="uids" item="item" index="index" open="" close="" separator=";">
+		update t_user 
+		<set>
+		<if test="del_status != null">
+			del_status = #{del_status},
+		</if>
+		</set>
+		where uid = #{item}
+   </foreach>
+ </update>
+<!-- 动态更新 -->
+<update id="update"  parameterMap="UserParam">
+	update t_user 
+	<set>
+		<if test="password != null">
+			password = #{password},
+		</if>
+		<if test="identity_num != null">
+			identity_num = #{identity_num},
+		</if>
+		<if test="phone_num != null">
+			phone_num = #{phone_num},
+		</if>
+		<if test="qq != null">
+			qq = #{qq},
+		</if>
+		<if test="weixin != null">
+			weixin = #{weixin},
+		</if>
+		<if test="mail != null">
+			mail = #{mail},
+		</if>
+		<if test="real_name != null">
+			real_name = #{real_name},
+		</if>
+		<if test="del_status != null">
+			del_status = #{del_status}
+		</if>
+		
+	</set>
+	where uid = #{uid}
+</update>
+<sql id="sqlwhere">
+	<where>
+		 del_status=0
+		<if test="uid != null">
+			 and uid = #{uid}
+		</if>
+		<if test="username != null">
+			 and username = #{username}
+		</if>
+		<if test="password != null">
+			 and password = #{password}
+		</if>
+		<if test="identity_num != null">
+			 and identity_num = #{identity_num}
+		</if>
+		<if test="phone_num != null">
+			and phone_num = #{phone_num}
+		</if>
+		<if test="qq != null">
+			 and qq = #{qq}
+		</if>
+		<if test="weixin != null">
+			 and weixin = #{weixin}
+		</if>
+		<if test="mail != null">
+			 and mail = #{mail}
+		</if>
+		<if test="real_name != null">
+			 and real_name = #{real_name}
+		</if>
+		<if test="avatar_img != null">
+			 and avatar_img = #{avatar_img}
+		</if>
+		<if test="updatetime != null">
+			 and updatetime = #{updatetime}
+		</if>
+		<if test="create_time != null">
+			 and create_time = #{create_time}
+		</if>
+	</where>
+</sql>
+<sql id="delwhere">
+	<where>
+	 	del_status=0 and is_supper !=1
+		<if test="uid != null">
+			 and uid = #{uid}
+		</if>
+		<if test="username != null">
+			 and username = #{username}
+		</if>
+		<if test="password != null">
+			 and password = #{password}
+		</if>
+		<if test="identity_num != null">
+			 and identity_num = #{identity_num}
+		</if>
+		<if test="phone_num != null">
+			phone_num = #{phone_num},
+		</if>
+		<if test="qq != null">
+			 and qq = #{qq}
+		</if>
+		<if test="weixin != null">
+			 and weixin = #{weixin}
+		</if>
+		<if test="mail != null">
+			 and mail = #{mail}
+		</if>
+		<if test="real_name != null">
+			 and real_name = #{real_name}
+		</if>
+		<if test="del_status != null">
+			 and del_status = #{del_status}
+		</if>
+		<if test="avatar_img != null">
+			 and avatar_img = #{avatar_img}
+		</if>
+		<if test="updatetime != null">
+			 and updatetime = #{updatetime}
+		</if>
+		<if test="create_time != null">
+			 and create_time = #{create_time}
+		</if>
+	 </where>
+</sql>
+<!-- 验证唯一 -->
+<select id="judgeonly" parameterMap="UserParam" resultType="java.util.HashMap">
+	select distinct if(exists(select uid from t_user
+	<where>
+		<if test="uid != null">
+			 uid = #{uid}
+		</if>
+	</where>
+	
+	),1,0) as flag from t_user
+</select>
+
+</mapper>

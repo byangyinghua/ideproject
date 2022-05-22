@@ -1,0 +1,12 @@
+2021-03-29 14:30:48 TestJava.java ERROR aaaaaaaa
+2021-03-29 14:32:05 TestJava.java ERROR aaaaaaaa
+2021-03-29 14:34:21 TestJava.java ERROR aaaaaaaa
+2021-03-29 14:34:55 TestJava.java DEBUG aaaaaaaa
+2021-03-29 14:34:55 TestJava.java ERROR aaaaaaaa
+2021-03-29 14:34:55 Log.java DEBUG （test） --- 1
+2021-03-29 14:48:27 Log.java DEBUG （test） --- 1
+2021-03-29 14:48:27 Log.java DEBUG （test） --- 2
+2021-03-29 14:48:27 Log.java DEBUG （test） --- 3
+2021-03-29 16:34:41 Log.java DEBUG （test） --- 1
+2021-03-29 16:34:41 Log.java DEBUG （test） --- 2
+2021-03-29 16:34:41 Log.java DEBUG （test） --- 3

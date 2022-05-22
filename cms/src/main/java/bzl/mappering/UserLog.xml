@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  -->
+<mapper namespace="UserLog">
+<resultMap id="UserLogResult" type="java.util.HashMap">
+	<result column="id" property="id" jdbcType="BIGINT"/>
+	<result column="uid" property="uid" jdbcType="VARCHAR"/>
+	<result column="username" property="username" jdbcType="VARCHAR"/>
+	<result column="realname" property="realname" jdbcType="VARCHAR"/>
+	<result column="action_type" property="action_type" jdbcType="CHAR"/>
+	<result column="action_content" property="action_content" jdbcType="VARCHAR"/>
+	<result column="create_time" property="create_time" jdbcType="TIMESTAMP"/>
+</resultMap>
+<resultMap id="UserLogResultEntity" type="bzl.entity.UserLog">
+	<result column="id" property="id" jdbcType="BIGINT"/>
+	<result column="uid" property="uid" jdbcType="VARCHAR"/>
+	<result column="username" property="username" jdbcType="VARCHAR"/>
+	<result column="realname" property="realname" jdbcType="VARCHAR"/>
+	<result column="action_type" property="action_type" jdbcType="CHAR"/>
+	<result column="action_content" property="action_content" jdbcType="VARCHAR"/>
+	<result column="create_time" property="create_time" jdbcType="TIMESTAMP"/>
+</resultMap>
+<parameterMap id="UserLogParam" type="java.util.HashMap">
+</parameterMap>
+<parameterMap id="UserLogEntity" type="bzl.entity.UserLog">
+</parameterMap>
+<sql id="mysql">
+	id,uid,username,realname,action_type,action_content,date_format(create_time,'%Y-%m-%d %H:%i:%s') AS create_time
+</sql>
+<select id="selectByPK" parameterMap="UserLogParam"
+resultMap="UserLogResult">
+  	 	select <include refid="mysql"/> from t_user_log where  id = #{id}
+</select>
+<select id="selectAll" resultMap="UserLogResult">
+  	select <include refid="mysql"/> from t_user_log
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+</select>
+<!-- 动态查询 -->
+<select id="selectByCondition" parameterMap="UserLogParam" resultMap="UserLogResult">
+	select <include refid="mysql"/> from t_user_log
+		<include refid="sqlwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+</select>
+<!-- 动态sql -->
+<select id="selectCountByCondition" parameterMap="UserLogParam" resultType="java.util.HashMap">
+	select count(1) count from t_user_log
+	<include refid="sqlwhere"/>
+</select>
+<!-- 动态获得本页统计 -->
+<select id="selectPageCountByCondition" parameterMap="UserLogParam" resultType="java.util.HashMap">
+	select count(1) count from t_user_log
+	<include refid="sqlwhere"/>
+	limit ${startrom},${pagesize}
+	</select>
+<!-- 动态分页sql -->
+<select id="selectByConditionWithPage" parameterMap="UserLogParam" resultMap="UserLogResult">
+	select <include refid="mysql"/> from t_user_log
+	<include refid="sqlwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+		</if>
+	<if test="order != null">
+			${order}
+	</if>
+	limit ${startrom},${pagesize}
+</select>
+
+<insert id="insert" parameterMap="UserLogParam" useGeneratedKeys="true">
+<![CDATA[
+      insert into t_user_log(uid,username,realname,action_type,action_content) values(#{uid},#{username},#{realname},#{action_type},#{action_content})
+    ]]>
+</insert>
+
+<sql id="sqlwhere">
+	<where>
+        <if test="id != null">
+			id = #{id}
+		</if>
+		<if test="uid != null">
+			 and uid = #{uid}
+		</if>
+		<if test="username != null">
+			 and username = #{username}
+		</if>
+		<if test="realname != null">
+			 and realname = #{realname}
+		</if>
+		<if test="action_type != null">
+			 and action_type = #{action_type}
+		</if>
+		<if test="action_content != null">
+			 and action_content = #{action_content}
+		</if>
+		<if test="start_time != null">
+			 <![CDATA[and  create_time >= STR_TO_DATE(#{start_time},'%Y-%m-%d')]]>
+		</if>
+		<if test="end_time != null">
+			 <![CDATA[and  create_time <= STR_TO_DATE(#{end_time},'%Y-%m-%d')]]>
+		</if>
+		<if test="uids != null">
+			 and uid in
+			<foreach item="item" index="index" collection="uids"  open="(" separator="," close=")">
+	            #{item}
+ 	        </foreach>
+		</if>
+	</where>
+</sql>
+
+
+
+</mapper>

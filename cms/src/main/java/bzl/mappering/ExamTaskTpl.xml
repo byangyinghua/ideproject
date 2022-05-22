@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- -->
+<mapper namespace="ExamTaskTpl">
+	<resultMap id="ExamTaskTplResult" type="java.util.HashMap">
+		<result column="id" property="id" jdbcType="BIGINT" />
+		<result column="task_id" property="task_id" jdbcType="VARCHAR" />
+		<result column="create_user" property="create_user"
+			jdbcType="VARCHAR" />
+		<result column="task_name" property="task_name"
+			jdbcType="VARCHAR" />
+		<result column="task_type" property="task_type"
+			jdbcType="INTEGER" />
+		<result column="plan_type" property="plan_type"
+			jdbcType="VARCHAR" />
+		<result column="priority" property="priority"
+			jdbcType="TINYINT" />
+		<result column="start_date" property="start_date"
+			jdbcType="DATE" />
+		<result column="end_date" property="end_date" jdbcType="DATE" />
+		<result column="play_periods" property="play_periods"
+			jdbcType="VARCHAR" />
+		<result column="play_mode" property="play_mode"
+			jdbcType="TINYINT" />
+		<result column="play_weekdays" property="play_weekdays"
+			jdbcType="VARCHAR" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="update_time" property="update_time"
+			jdbcType="TIMESTAMP" />
+		<result column="create_time" property="create_time"
+			jdbcType="DATE" />
+		<result column="creator_uid" property="creator_uid"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="ExamTaskTplResultEntity"
+		type="bzl.entity.ExamTaskTpl">
+		<result column="id" property="id" jdbcType="BIGINT" />
+		<result column="task_id" property="task_id" jdbcType="VARCHAR" />
+		<result column="create_user" property="create_user"
+			jdbcType="VARCHAR" />
+		<result column="task_name" property="task_name"
+			jdbcType="VARCHAR" />
+		<result column="task_type" property="task_type"
+			jdbcType="INTEGER" />
+		<result column="plan_type" property="plan_type"
+			jdbcType="VARCHAR" />
+		<result column="priority" property="priority"
+			jdbcType="TINYINT" />
+		<result column="start_date" property="start_date"
+			jdbcType="DATE" />
+		<result column="end_date" property="end_date" jdbcType="DATE" />
+		<result column="play_periods" property="play_periods"
+			jdbcType="VARCHAR" />
+		<result column="play_mode" property="play_mode"
+			jdbcType="TINYINT" />
+		<result column="play_weekdays" property="play_weekdays"
+			jdbcType="VARCHAR" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="update_time" property="update_time"
+			jdbcType="TIMESTAMP" />
+		<result column="create_time" property="create_time"
+			jdbcType="DATE" />
+		<result column="creator_uid" property="creator_uid"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<parameterMap id="ExamTaskTplParam" type="java.util.HashMap">
+	</parameterMap>
+	<parameterMap id="ExamTaskTplEntity"
+		type="bzl.entity.ExamTaskTpl">
+	</parameterMap>
+	<sql id="mysql">
+		id,task_id,create_user,task_name,task_type,plan_type,priority,start_date,end_date,play_periods,play_mode,play_weekdays,content,creator_uid,update_time,create_time
+	</sql>
+	<select id="selectByPK" parameterMap="ExamTaskTplParam"
+		resultMap="ExamTaskTplResult">
+		select
+		<include refid="mysql" />
+		from t_examtask_tpl where task_id = #{task_id}
+	</select>
+	<select id="selectAll" resultMap="ExamTaskTplResult">
+		select
+		<include refid="mysql" />
+		from t_examtask_tpl
+		<if test="sort != null">
+			order by ${sort}
+		</if>
+		<if test="order != null">
+			${order}
+		</if>
+	</select>
+	<!-- 动态查询 -->
+	<select id="selectByCondition" parameterMap="ExamTaskTplParam"
+		resultMap="ExamTaskTplResult">
+		select
+		<include refid="mysql" />
+		from t_examtask_tpl
+		<include refid="sqlwhere" />
+		<if test="sort != null">
+			order by ${sort}
+		</if>
+		<if test="order != null">
+			${order}
+		</if>
+	</select>
+	<!-- 动态sql -->
+	<select id="selectCountByCondition" parameterMap="ExamTaskTplParam"
+		resultType="java.util.HashMap">
+		select count(1) count from t_examtask_tpl
+		<include refid="sqlwhere" />
+	</select>
+	<!-- 动态获得本页统计 -->
+	<select id="selectPageCountByCondition"
+		parameterMap="ExamTaskTplParam" resultType="java.util.HashMap">
+		select count(1) count from t_examtask_tpl
+		<include refid="sqlwhere" />
+		limit ${startrom},${pagesize}
+	</select>
+	<!-- 动态分页sql -->
+	<select id="selectByConditionWithPage"
+		parameterMap="ExamTaskTplParam" resultMap="ExamTaskTplResult">
+		select
+		<include refid="mysql" />
+		from t_examtask_tpl
+		<include refid="sqlwhere" />
+		<if test="sort != null">
+			order by ${sort}
+		</if>
+		<if test="order != null">
+			${order}
+		</if>
+		limit ${startrom},${pagesize}
+	</select>
+	<!-- 动态统计已删除记录 -->
+	<select id="selectDelCountByCondition"
+		parameterMap="ExamTaskTplParam" resultType="java.util.HashMap">
+		select count(1) count from t_examtask_tpl
+		<include refid="sqlwhere" />
+	</select>
+	<!-- 动态查询已删除记录分页 -->
+	<select id="selectDelByConditionWithPage"
+		parameterMap="ExamTaskTplParam" resultMap="ExamTaskTplResult">
+		select
+		<include refid="mysql" />
+		from t_examtask_tpl
+		<include refid="sqlwhere" />
+		<if test="sort != null">
+			order by ${sort}
+		</if>
+		<if test="order != null">
+			${order}
+		</if>
+		limit ${startrom},${pagesize}
+	</select>
+	<insert id="insert" parameterMap="ExamTaskTplParam"
+		useGeneratedKeys="true">
+<![CDATA[
+      insert into t_examtask_tpl(task_id,create_user,task_name,task_type,plan_type,priority,start_date,end_date,play_periods,play_mode,play_weekdays,content,creator_uid,create_time) values(#{task_id},#{create_user},#{task_name},#{task_type},#{plan_type},#{priority},#{start_date},#{end_date},#{play_periods},#{play_mode},#{play_weekdays},#{content},#{creator_uid},#{create_time})
+    ]]>
+	</insert>
+	<delete id="delete" parameterMap="ExamTaskTplParam">
+  <![CDATA[
+    delete from t_examtask_tpl where task_id = #{task_id}
+  ]]>
+	</delete>
+ <!-- 批量查询 -->
+ <select id="getTaskByIds"  parameterMap="ExamTaskTplParam" resultMap="ExamTaskTplResult">
+select * from t_examtask_tpl where task_id in 
+    <foreach item="item" index="index" collection="task_ids"  open="(" separator="," close=")"> <![CDATA["${item}"]]></foreach>
+     order by create_time
+ </select>
+
+      <!-- 批量删除 -->
+ <delete id="deleteBat" parameterMap="ExamTaskTplParam">
+		delete from t_examtask_tpl where
+		task_id in
+        <foreach item="item" index="index" collection="task_ids" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+ </delete>
+	<!-- 批量伪删除 -->
+	<update id="updateStatus" parameterMap="ExamTaskTplParam">
+		<foreach collection="id" item="item" index="index" open=""
+			close="" separator=";">
+			update t_examtask_tpl
+			<set>
+				<if test="del_status != null">
+					del_status = #{del_status},
+				</if>
+			</set>
+			where uid = #{item}
+		</foreach>
+	</update>
+	<!-- 动态更新 -->
+	<update id="update" parameterMap="ExamTaskTplParam">
+		update t_examtask_tpl
+		<set>
+			<if test="task_name != null">
+				task_name = #{task_name},
+			</if>
+			<if test="task_type != null">
+				task_type = #{task_type},
+			</if>
+			<if test="plan_type != null">
+				plan_type = #{plan_type},
+			</if>
+			<if test="priority !=null">
+				priority = #{priority},
+			</if>
+			<if test="start_date != null">
+				start_date = #{start_date},
+			</if>
+			<if test="end_date != null">
+				end_date = #{end_date},
+			</if>
+			<if test="play_periods != null">
+				play_periods = #{play_periods},
+			</if>
+			<if test="play_mode!=null">
+				play_mode = #{play_mode},
+			</if>
+			<if test="play_weekdays != null">
+				play_weekdays = #{play_weekdays},
+			</if>
+			<if test="content != null">
+				content = #{content},
+			</if>
+		</set>
+		where task_id = #{task_id}
+	</update>
+	<sql id="sqlwhere">
+		<trim prefix="WHERE" prefixOverrides="AND">
+			<if test="task_id != null">
+				task_id = #{task_id}
+			</if>
+			<if test="task_ids != null">
+			 and task_id in
+			<foreach item="item" index="index" collection="task_ids"  open="(" separator="," close=")">
+	            #{item}
+ 	        </foreach>
+		    </if>
+		    
+			<if test="task_name != null">
+				and task_name = #{task_name}
+			</if>
+			<if test="task_type != null">
+				and task_type = #{task_type}
+			</if>
+			<if test="plan_type != null">
+				and plan_type = #{plan_type}
+			</if>
+			<if test="priority !=null">
+				and priority = #{priority}
+			</if>
+			<if test="start_date != null">
+				and start_date = #{start_date}
+			</if>
+			<if test="end_date != null">
+				and end_date = #{end_date}
+			</if>
+			<if test="play_periods != null">
+				and play_periods = #{play_periods}
+			</if>
+			<if test="play_mode != null">
+				and play_mode = #{play_mode}
+			</if>
+			<if test="play_weekdays != null">
+				and play_weekdays = #{play_weekdays}
+			</if>
+			<if test="content != null">
+				and content LIKE
+				CONCAT('%',#{content,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="creator_uid != null">
+				and creator_uid = #{creator_uid}
+			</if>
+			<if test="creator_uids != null">
+			 and creator_uid in
+			<foreach item="item" index="index" collection="creator_uids"  open="(" separator="," close=")">
+	            #{item}
+ 	        </foreach>
+		    </if>
+			
+		</trim>
+	</sql>
+	<!-- 验证唯一 -->
+	<select id="judgeonly" parameterMap="ExamTaskTplParam"
+		resultType="java.util.HashMap">
+		select distinct if(exists(select uid from t_examtask_tpl
+		<where>
+			<if test="task_id != null">
+				task_id = #{task_id}
+			</if>
+		</where>
+
+		),1,0) as flag from t_examtask_tpl
+	</select>
+
+</mapper>

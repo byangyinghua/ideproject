@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  -->
+<mapper namespace="ShieldTask">
+<resultMap id="ShieldTaskResult" type="java.util.HashMap">
+	<result column="id" property="id" jdbcType="BIGINT"/>
+	<result column="shield_id" property="shield_id" jdbcType="VARCHAR"/>
+	<result column="start_time" property="start_time" jdbcType="VARCHAR"/>
+	<result column="end_time" property="end_time" jdbcType="DATE"/>
+	<result column="week_days" property="week_days" jdbcType="VARCHAR"/>
+	<result column="task_name" property="task_name" jdbcType="VARCHAR"/>
+	<result column="creator" property="creator" jdbcType="VARCHAR"/>
+	<result column="creator_uid" property="creator_uid" jdbcType="VARCHAR"/>
+	<result column="update_time" property="update_time" jdbcType="TIMESTAMP"/>
+</resultMap>
+<resultMap id="ShieldTaskResultEntity" type="bzl.entity.ShieldTask">
+	<result column="id" property="id" jdbcType="BIGINT"/>
+	<result column="shield_id" property="shield_id" jdbcType="VARCHAR"/>
+	<result column="start_time" property="start_time" jdbcType="VARCHAR"/>
+	<result column="end_time" property="end_time" jdbcType="DATE"/>
+	<result column="week_days" property="week_days" jdbcType="VARCHAR"/>
+	<result column="task_name" property="task_name" jdbcType="VARCHAR"/>
+	<result column="creator" property="creator" jdbcType="VARCHAR"/>
+	<result column="creator_uid" property="creator_uid" jdbcType="VARCHAR"/>
+	<result column="update_time" property="update_time" jdbcType="TIMESTAMP"/>
+</resultMap>
+<parameterMap id="ShieldTaskParam" type="java.util.HashMap">
+</parameterMap>
+<parameterMap id="ShieldTaskEntity" type="bzl.entity.ShieldTask">
+</parameterMap>
+<sql id="mysql">
+	id,shield_id,task_name,start_time,end_time,week_days,creator,creator_uid,update_time
+</sql>
+<select id="selectByPK" parameterMap="ShieldTaskParam"
+resultMap="ShieldTaskResult">
+  	 	select <include refid="mysql"/> from t_shield_task where shield_id = #{shield_id}
+</select>
+<select id="selectAll" resultMap="ShieldTaskResult">
+  	select <include refid="mysql"/> from t_shield_task
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+</select>
+<!-- 动态查询 -->
+<select id="selectByCondition" parameterMap="ShieldTaskParam" resultMap="ShieldTaskResult">
+	select <include refid="mysql"/> from t_shield_task
+		<include refid="sqlwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+</select>
+<!-- 动态sql -->
+<select id="selectCountByCondition" parameterMap="ShieldTaskParam" resultType="java.util.HashMap">
+	select count(1) count from t_shield_task
+	<include refid="sqlwhere"/>
+</select>
+<!-- 动态获得本页统计 -->
+<select id="selectPageCountByCondition" parameterMap="ShieldTaskParam" resultType="java.util.HashMap">
+	select count(1) count from t_shield_task
+	<include refid="sqlwhere"/>
+	limit ${startrom},${pagesize}
+	</select>
+<!-- 动态分页sql -->
+<select id="selectByConditionWithPage" parameterMap="ShieldTaskParam" resultMap="ShieldTaskResult">
+	select <include refid="mysql"/> from t_shield_task
+	<include refid="sqlwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+		</if>
+	<if test="order != null">
+			${order}
+	</if>
+	limit ${startrom},${pagesize}
+</select>
+<!-- 动态统计已删除记录-->
+<select id="selectDelCountByCondition" parameterMap="ShieldTaskParam" resultType="java.util.HashMap">
+	select count(1) count from t_shield_task
+	<include refid="delwhere"/>
+</select>
+<!-- 动态查询已删除记录分页-->
+<select id="selectDelByConditionWithPage" parameterMap="ShieldTaskParam" resultMap="ShieldTaskResult">
+	select <include refid="mysql"/> from t_shield_task
+	<include refid="delwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+	limit ${startrom},${pagesize}
+</select>
+<insert id="insert" parameterMap="ShieldTaskParam" useGeneratedKeys="true">
+<![CDATA[
+      insert into t_shield_task(shield_id,start_time,end_time,week_days,task_name,creator,creator_uid) values(#{shield_id},#{start_time},#{end_time},#{week_days},#{task_name},#{creator},#{creator_uid})
+    ]]>
+</insert>
+<delete id="delete" parameterMap="ShieldTaskParam">
+  <![CDATA[
+    delete from t_shield_task where shield_id = #{shield_id}
+  ]]>
+</delete>
+<!-- 批量删除 -->
+<delete id="deleteBat" parameterMap="ShieldTaskParam">
+    delete from t_shield_task where
+     	shield_id in 
+		<foreach item="item" index="index" collection="shield_ids"  open="(" separator="," close=")">
+	      #{item}
+ 	 </foreach>
+ </delete>
+<!-- 批量伪删除 -->
+<update id="updateStatus"  parameterMap="ShieldTaskParam">
+    <foreach collection="id" item="item" index="index" open="" close="" separator=";">
+		update t_shield_task 
+		<set>
+		<if test="del_status != null">
+			del_status = #{del_status},
+		</if>
+		</set>
+		where uid = #{item}
+   </foreach>
+ </update>
+<!-- 动态更新 -->
+<update id="update"  parameterMap="ShieldTaskParam">
+	update t_shield_task 
+	<set>
+		<if test="start_time != null">
+			start_time = #{start_time},
+		</if>
+		<if test="end_time != null">
+			end_time = #{end_time},
+		</if>
+		<if test="week_days != null">
+			week_days = #{week_days},
+		</if>
+		<if test="task_name != null">
+			task_name = #{task_name}
+		</if>
+		<if test="creator != null">
+			creator = #{creator}
+		</if>
+		<if test="creator_uid != null">
+			creator_uid = #{creator_uid}
+		</if>
+		
+	</set>
+	where shield_id = #{shield_id}
+</update>
+<sql id="sqlwhere">
+	<where>
+		<if test="id != null">
+		     id = #{id}
+		</if>
+		<if test="shield_id != null">
+			 and shield_id = #{shield_id}
+		</if>
+		<if test="start_time != null">
+			 and start_time = #{start_time}
+		</if>
+		<if test="end_time != null">
+			 and end_time = #{end_time}
+		</if>
+		<if test="week_days != null">
+			 and week_days = #{week_days}
+		</if>
+		<if test="task_name != null">
+			and task_name = #{task_name}
+		</if>
+		<if test="creator != null">
+			and creator = #{creator}
+		</if>
+		<if test="creator_uid != null">
+				and creator_uids = #{creator_uids}
+		</if>
+		<if test="creator_uids != null">
+			 and creator_uid in
+			<foreach item="item" index="index" collection="creator_uids"  open="(" separator="," close=")">
+	            #{item}
+ 	        </foreach>
+		 </if>
+		<if test="update_time != null">
+			 and update_time = #{update_time}
+		</if>
+	</where>
+</sql>
+<sql id="delwhere">
+	<where>
+		<if test="id != null">
+			 id = #{id}
+		</if>
+		<if test="shield_id != null">
+			 and shield_id = #{shield_id}
+		</if>
+		<if test="start_time != null">
+			 and start_time = #{start_time}
+		</if>
+		<if test="end_time != null">
+			 and end_time = #{end_time}
+		</if>
+		<if test="week_days != null">
+			 and week_days = #{week_days}
+		</if>
+		<if test="task_name != null">
+			and task_name = #{task_name},
+		</if>
+		<if test="creator != null">
+			and creator = #{creator}
+		</if>
+			<if test="creator_uid != null">
+				and creator_uids = #{creator_uids}
+		</if>
+		<if test="creator_uids != null">
+			 and creator_uid in
+			<foreach item="item" index="index" collection="creator_uids"  open="(" separator="," close=")">
+	            #{item}
+ 	        </foreach>
+		 </if>
+		<if test="update_time != null">
+			 and update_time = #{update_time}
+		</if>
+	 </where>
+</sql>
+<!-- 验证唯一 -->
+<select id="judgeonly" parameterMap="ShieldTaskParam" resultType="java.util.HashMap">
+	select distinct if(exists(select id from t_shield_task
+	<where>
+		<if test="id != null">
+			 id = #{id}
+		</if>
+	</where>
+	
+	),1,0) as flag from t_shield_task
+</select>
+
+</mapper>

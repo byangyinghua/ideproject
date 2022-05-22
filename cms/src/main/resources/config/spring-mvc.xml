@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="
+    http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.2.xsd
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
+	<!-- 自动扫描该包，使SpringMVC认为包下用了@controller注解的类是控制器 -->
+	<context:component-scan
+		base-package="bzl.controller" />
+	<context:component-scan
+		base-package="bzl.service" />
+	<!-- <context:component-scan base-package="bzl.websocket" /> -->
+	<!-- 避免IE在ajax请求时，返回json出现下载 -->
+	<bean id="jacksonMessageConverter"
+		class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter">
+		<property name="supportedMediaTypes">
+			<list>
+				<value>text/html;charset=UTF-8</value>
+			</list>
+		</property>
+	</bean>
+
+
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 设置上传文件的最大尺寸为10MB -->
+		<property name="maxUploadSize">
+			<value>10485760000</value>
+		</property>
+		<property name="maxInMemorySize">
+			<value>4096</value>
+		</property>
+	</bean>
+	<!-- 初始化系统相关内容 -->
+	<bean id="SystemInit" class="bzl.init.SystemInit"></bean>
+	<!-- spring 工具类 -->
+	<bean id="springBeansUtil" class="utils.SpringBeansUtil"></bean>
+	<!-- 挂载终端socket通信 消息发送和处理任务 -->
+	<bean id="taskSocket" class="bzl.task.SocketMsgHandler"></bean>
+
+<!-- 	<bean id="rtmpManager" class="bzl.task.RtmpManagerTask"></bean>  -->
+	<!-- 挂载屏蔽器socket服务 -->
+	<!-- <bean id="shieldSocket" class="org.system.socket.ShieldSocket"></bean> -->
+	<!-- 定时清除服务器下达任务 -->
+	<!-- <bean id="clearnTaskSocket" class="org.system.socket.CleanTaskSocket"></bean> -->
+	<!-- 根据GPS校对服务器时间 -->
+	<!-- <bean id="timeFromGpsSocket" class="org.system.socket.TimeFromGpsSocket"></bean> -->
+	<!-- springmvc不能处理的交给tomcat 处理静态资源 -->
+	<mvc:default-servlet-handler />
+	<!-- springmvc高级功能 校验、ajax -->
+	<mvc:annotation-driven />
+	<!-- websocket handler -->
+	<bean id="websocket" class="bzl.websocket.WebSocketEndpoint"></bean>
+
+	<import resource="spring-rtmp.xml" />
+</beans>

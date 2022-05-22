@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  -->
+<mapper namespace="Terminal">
+<resultMap id="TerminalResult" type="java.util.HashMap">
+	<result column="id" property="id" jdbcType="INTEGER"/>
+	<result column="terminal_id" property="terminal_id" jdbcType="VARCHAR"/>
+	<result column="ip" property="ip" jdbcType="VARCHAR"/>
+	<result column="gids" property="gids" jdbcType="VARCHAR"/>
+	<result column="name" property="name" jdbcType="VARCHAR"/>
+	<result column="err_msg" property="err_msg" jdbcType="VARCHAR"/>
+	<result column="install_addr" property="install_addr" jdbcType="VARCHAR"/>
+	<result column="volume" property="volume" jdbcType="SMALLINT"/>
+	<result column="app_ver" property="app_ver" jdbcType="VARCHAR"/>
+	<result column="boot_time" property="boot_time" jdbcType="CHAR"/>
+	<result column="lamp_status" property="lamp_status" jdbcType="VARCHAR"/>
+	<result column="shutdown_time" property="shutdown_time" jdbcType="CHAR"/>
+	<result column="update_time" property="update_time" jdbcType="TIMESTAMP"/>
+</resultMap>
+<resultMap id="TerminalResultEntity" type="bzl.entity.Terminal">
+	<result column="id" property="id" jdbcType="INTEGER"/>
+	<result column="terminal_id" property="terminal_id" jdbcType="VARCHAR"/>
+	<result column="ip" property="ip" jdbcType="VARCHAR"/>
+	<result column="gids" property="gids" jdbcType="VARCHAR"/>
+	<result column="name" property="name" jdbcType="VARCHAR"/>
+	<result column="err_msg" property="err_msg" jdbcType="VARCHAR"/>
+	<result column="install_addr" property="install_addr" jdbcType="VARCHAR"/>
+	<result column="volume" property="volume" jdbcType="SMALLINT"/>
+	<result column="app_ver" property="app_ver" jdbcType="VARCHAR"/>
+	<result column="boot_time" property="boot_time" jdbcType="CHAR"/>
+	<result column="lamp_status" property="lamp_status" jdbcType="VARCHAR"/>
+	<result column="shutdown_time" property="shutdown_time" jdbcType="CHAR"/>
+	<result column="update_time" property="update_time" jdbcType="TIMESTAMP"/>
+</resultMap>
+<parameterMap id="TerminalParam" type="java.util.HashMap">
+</parameterMap>
+<parameterMap id="TerminalEntity" type="bzl.entity.Terminal">
+</parameterMap>
+<sql id="mysql">
+	id,terminal_id,ip,gids,name,err_msg,install_addr,volume,app_ver,boot_time,lamp_status,shutdown_time,update_time
+</sql>
+<select id="selectByPK" parameterMap="TerminalParam"
+resultMap="TerminalResult">
+  	 	select <include refid="mysql"/> from t_terminal where  terminal_id = #{terminal_id}
+</select>
+<select id="selectAll" resultMap="TerminalResult">
+  	select <include refid="mysql"/> from t_terminal
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+</select>
+
+<select id="selectByGroupId" resultMap="TerminalResult">
+  	select <include refid="mysql"/> from t_terminal
+  	WHERE gids LIKE CONCAT('%',#{gid,jdbcType=VARCHAR},'%')
+</select>
+
+<select id="selectUngroup" resultMap="TerminalResult">
+  	select <include refid="mysql"/> from t_terminal
+  	WHERE LENGTH(gids)=0 or isnull(gids) 
+</select>
+
+
+<!-- 动态查询 -->
+<select id="selectByCondition" parameterMap="TerminalParam" resultMap="TerminalResult">
+	select <include refid="mysql"/> from t_terminal
+		<include refid="sqlwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+</select>
+<!-- 动态sql -->
+<select id="selectCountByCondition" parameterMap="TerminalParam" resultType="java.util.HashMap">
+	select count(1) count from t_terminal
+	<include refid="search"/>
+</select>
+<!-- 动态获得本页统计 -->
+<select id="selectPageCountByCondition" parameterMap="TerminalParam" resultType="java.util.HashMap">
+	select count(1) count from t_terminal
+	<include refid="sqlwhere"/>
+	limit ${startrom},${pagesize}
+	</select>
+<!-- 动态分页sql -->
+<select id="selectByConditionWithPage" parameterMap="TerminalParam" resultMap="TerminalResult">
+	select <include refid="mysql"/> from t_terminal
+	<include refid="sqlwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+		</if>
+	<if test="order != null">
+			${order}
+	</if>
+	limit ${startrom},${pagesize}
+</select>
+
+<!-- 动态分页sql -->
+<select id="selectBySearch" parameterMap="TerminalParam" resultMap="TerminalResult">
+	select <include refid="mysql"/> from t_terminal
+	<include refid="search"/>
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+	limit ${startrom},${pagesize}
+</select>
+
+<select id="selectLampOn" parameterMap="TerminalParam" resultMap="TerminalResult">
+	select <include refid="mysql"/> from t_terminal
+	<include refid="lampOn"/>
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+	limit ${startrom},${pagesize}
+</select>
+
+<!-- 动态统计已删除记录-->
+<select id="selectDelCountByCondition" parameterMap="TerminalParam" resultType="java.util.HashMap">
+	select count(1) count from t_terminal
+	<include refid="delwhere"/>
+</select>
+
+<select id="countTerminalByGid" parameterMap="TerminalParam" resultType="java.util.HashMap">
+	select count(1) count from t_terminal
+	<include refid="sqlwhere"/>
+</select>
+
+<!-- 动态查询已删除记录分页-->
+<select id="selectDelByConditionWithPage" parameterMap="TerminalParam" resultMap="TerminalResult">
+	select <include refid="mysql"/> from t_terminal
+	<include refid="delwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+	limit ${startrom},${pagesize}
+</select>
+<insert id="insert" parameterMap="TerminalParam" useGeneratedKeys="true">
+<![CDATA[
+      insert into t_terminal(terminal_id,ip,gids,name,err_msg,install_addr,volume,app_ver,boot_time,lamp_status,shutdown_time) values(#{terminal_id},#{ip},#{gids},#{name},#{err_msg},#{install_addr},#{volume},#{app_ver},#{boot_time},#{lamp_status},#{shutdown_time})
+    ]]>
+</insert>
+<delete id="delete" parameterMap="TerminalParam">
+  delete  from t_terminal
+	<include refid="delwhere"/>
+</delete>
+
+<!-- 按照分组id删除 -->
+<delete id="deleteByGroupId" parameterMap="TerminalParam">
+    delete from t_terminal WHERE gids LIKE CONCAT('%',#{gid,jdbcType=VARCHAR},'%')
+ </delete>
+ 
+<!-- 批量删除 -->
+<delete id="deleteBat" parameterMap="TerminalParam">
+
+    delete from t_terminal where
+     	terminal_id in 
+		<foreach item="item" index="index" collection="terminal_ids"  open="(" separator="," close=")">
+	      #{item}
+ 	 </foreach>
+
+ </delete>
+ 
+ <!-- 批量查询 -->
+ <select id="selectByIds"  parameterMap="TerminalParam" resultMap="TerminalResult">
+select * from t_terminal where terminal_id in 
+    <foreach item="item" index="index" collection="terminal_ids"  open="(" separator="," close=")"> <![CDATA["${item}"]]></foreach>
+     order by update_time
+ </select>
+ 
+<!-- 批量伪删除 -->
+<update id="updateStatus"  parameterMap="TerminalParam">
+    <foreach collection="id" item="item" index="index" open="" close="" separator=";">
+		update t_terminal 
+		<set>
+		<if test="del_status != null">
+			del_status = #{del_status},
+		</if>
+		</set>
+		where terminal_id = #{item}
+   </foreach>
+ </update>
+<!-- 动态更新 -->
+<update id="update"  parameterMap="TerminalParam">
+	update t_terminal 
+	<set>
+		<if test="ip != null">
+			ip = #{ip},
+		</if>
+		<if test="gids != null">
+			gids = #{gids},
+		</if>
+		<if test="name != null">
+			name = #{name},
+		</if>
+		<if test="err_msg != null">
+			err_msg = #{err_msg},
+		</if>
+		<if test="install_addr != null">
+			install_addr = #{install_addr},
+		</if>
+		<if test="volume != null">
+			volume = #{volume},
+		</if>
+		<if test="app_ver != null">
+			app_ver = #{app_ver},
+		</if>
+
+		<if test="boot_time != null">
+			boot_time = #{boot_time},
+		</if>
+		<if test="shutdown_time != null">
+			shutdown_time = #{shutdown_time},
+		</if>
+		
+	</set>
+	where terminal_id = #{terminal_id}
+</update>
+
+
+<!-- 动态更新 -->
+<update id="updateByIp"  parameterMap="TerminalParam">
+	update t_terminal 
+	<set>
+		<if test="gids != null">
+			gids = #{gids},
+		</if>
+		<if test="name != null">
+			name = #{name},
+		</if>
+		<if test="err_msg != null">
+			err_msg = #{err_msg},
+		</if>
+		<if test="install_addr != null">
+			install_addr = #{install_addr},
+		</if>
+		<if test="volume != null">
+			volume = #{volume},
+		</if>
+		<if test="app_ver != null">
+			app_ver = #{app_ver},
+		</if>
+		<if test="boot_time != null">
+			boot_time = #{boot_time},
+		</if>
+		<if test="shutdown_time != null">
+			shutdown_time = #{shutdown_time},
+		</if>
+		
+	</set>
+	where  ip=#{ip}
+</update>
+
+<sql id="sqlwhere">
+	<where>
+		<if test="ip != null">
+			 ip = #{ip}
+		</if>
+		<if test="terminal_id != null">
+			 and terminal_id = #{terminal_id}
+		</if>
+		<if test="gid != null">
+			 and gids LIKE CONCAT('%',#{gid,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="name != null">
+			 and name = #{name}
+		</if>
+		<if test="install_addr != null">
+			and install_addr = #{install_addr}
+		</if>
+		<if test="volume != null">
+			 and volume = #{volume}
+		</if>
+		<if test="boot_time != null">
+			 and boot_time = #{boot_time}
+		</if>
+		<if test="lamp_status != null">
+			 and LENGTH(lamp_status) >0
+		</if>
+		<if test="shutdown_time != null">
+			 and shutdown_time = #{shutdown_time}
+		</if>
+	
+	</where>
+</sql>
+<sql id="delwhere">
+	<where>
+	 	<if test="ip != null">
+			 ip = #{ip}
+		</if>
+		<if test="terminal_id != null">
+			and terminal_id = #{terminal_id}
+		</if>
+		<if test="gid != null">
+			and gids LIKE CONCAT('%',#{gid,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="name != null">
+			 and name = #{name}
+		</if>
+		<if test="install_addr != null">
+			and install_addr = #{install_addr},
+		</if>
+		<if test="volume != null">
+			 and volume = #{volume}
+		</if>
+		<if test="boot_time != null">
+			 and boot_time = #{boot_time}
+		</if>
+		<if test="shutdown_time != null">
+			 and shutdown_time = #{shutdown_time}
+		</if>
+	 </where>
+</sql>
+
+<sql id="search">
+    <where>
+	 	<if test="key != null">
+	 	     terminal_id LIKE CONCAT('%',#{key,jdbcType=VARCHAR},'%')
+			 OR ip LIKE CONCAT('%',#{key,jdbcType=VARCHAR},'%')
+			 OR name LIKE CONCAT('%',#{key,jdbcType=VARCHAR},'%')
+			 OR install_addr LIKE CONCAT('%',#{key,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="lamp_status != null">
+		   and LENGTH(lamp_status) > 0
+		</if>
+		<if test="gid != null">
+			and gids LIKE CONCAT('%',#{gid,jdbcType=VARCHAR},'%')
+		</if>
+	 </where>
+</sql>
+
+<sql id="lampOn">
+    <where>
+		<if test="lamp_status != null">
+		    LENGTH(lamp_status) > 0
+		</if>
+	 </where>
+</sql>
+
+<!-- 验证唯一 -->
+<select id="judgeonly" parameterMap="TerminalParam" resultType="java.util.HashMap">
+	select distinct if(exists(select terminal_id from t_terminal
+	<where>
+		<if test="terminal_id != null">
+			 terminal_id = #{terminal_id}
+		</if>
+	</where>
+	
+	),1,0) as flag from t_terminal
+</select>
+
+</mapper>

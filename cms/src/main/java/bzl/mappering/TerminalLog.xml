@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- -->
+<mapper namespace="TerminalLog">
+	<resultMap id="TerminalLogResult" type="java.util.HashMap">
+		<result column="id" property="id" jdbcType="BIGINT" />
+		<result column="terminal_id" property="terminal_id"
+			jdbcType="VARCHAR" />
+		<result column="action" property="action" jdbcType="VARCHAR" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="result" property="result" jdbcType="VARCHAR" />
+		<result column="create_time" property="create_time"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="TerminalLogResultEntity"
+		type="bzl.entity.TerminalLog">
+		<result column="id" property="id" jdbcType="BIGINT" />
+		<result column="terminal_id" property="terminal_id"
+			jdbcType="VARCHAR" />
+		<result column="action" property="action" jdbcType="VARCHAR" />
+		<result column="content" property="content" jdbcType="VARCHAR" />
+		<result column="result" property="result" jdbcType="VARCHAR" />
+		<result column="create_time" property="create_time"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+	<parameterMap id="TerminalLogParam"
+		type="java.util.HashMap">
+	</parameterMap>
+	<parameterMap id="TerminalLogEntity"
+		type="bzl.entity.TerminalLog">
+	</parameterMap>
+	<sql id="mysql">
+		id,terminal_id,action,content,result,date_format(create_time,'%Y-%m-%d %H:%i:%s') AS create_time
+	</sql>
+	<select id="selectByPK" parameterMap="TerminalLogParam"
+		resultMap="TerminalLogResult">
+		select
+		<include refid="mysql" />
+		from t_terminal_log where id = #{id}
+	</select>
+	<select id="selectAll" resultMap="TerminalLogResult">
+		select
+		<include refid="mysql" />
+		from t_terminal_log
+		<if test="sort != null">
+			order by ${sort}
+		</if>
+		<if test="order != null">
+			${order}
+		</if>
+	</select>
+	<!-- 动态查询 -->
+	<select id="selectByCondition" parameterMap="TerminalLogParam"
+		resultMap="TerminalLogResult">
+		select
+		<include refid="mysql" />
+		from t_terminal_log
+		<include refid="sqlwhere" />
+		<if test="sort != null">
+			order by ${sort}
+		</if>
+		<if test="order != null">
+			${order}
+		</if>
+	</select>
+	<!-- 动态sql -->
+	<select id="selectCountByCondition"
+		parameterMap="TerminalLogParam" resultType="java.util.HashMap">
+		select count(1) count from t_terminal_log
+		<include refid="sqlwhere" />
+	</select>
+	<!-- 动态获得本页统计 -->
+	<select id="selectPageCountByCondition"
+		parameterMap="TerminalLogParam" resultType="java.util.HashMap">
+		select count(1) count from t_terminal_log
+		<include refid="sqlwhere" />
+		limit ${startrom},${pagesize}
+	</select>
+	<!-- 动态分页sql -->
+		<select id="selectByConditionWithPage"
+		parameterMap="TerminalLogParam" resultMap="TerminalLogResult">
+		select
+		<include refid="mysql" />
+		from t_terminal_log
+		<include refid="sqlwhere" />
+		<if test="sort != null">
+			order by ${sort}
+		</if>
+		<if test="order != null">
+			${order}
+		</if>
+		limit ${startrom},${pagesize}
+	</select>
+
+
+	<insert id="insert" parameterMap="TerminalLogParam"
+		useGeneratedKeys="true">
+<![CDATA[
+      insert into t_terminal_log(terminal_id,action,content,result) values(#{terminal_id},#{action},#{content},#{result})
+    ]]>
+	</insert>
+
+	<!-- 动态更新 -->
+	<update id="update" parameterMap="TerminalLogParam">
+		update t_terminal_log
+		<set>
+			<if test="result != null">
+				result = #{result}
+			</if>
+		</set>
+		<where>
+			<if test="content != null">
+				content like CONCAT('%',#{content,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="terminal_id != null">
+				and terminal_id = #{terminal_id}
+			</if>
+		</where>
+	</update>
+	
+<select id="countByTerminalGid" resultMap="TerminalLogResultEntity">
+    select count(1) count
+    FROM
+    `t_terminal_log` h
+    LEFT JOIN `t_terminal` t ON h.terminal_id = t.terminal_id
+   <include refid="joinSqlWhere"/>
+</select>
+
+
+<select id="selectByTerminalGidByPage" resultMap="TerminalLogResultEntity">
+    SELECT id,terminal_id,action,content,result,date_format(create_time,'%Y-%m-%d %H:%i:%s') AS create_time
+    FROM
+    `t_terminal_log` h
+    LEFT JOIN `t_terminal` t ON h.terminal_id = t.terminal_id
+   <include refid="joinSqlWhere"/>
+   	<if test="sort != null">
+		order by ${sort}
+		</if>
+	<if test="order != null">
+			${order}
+	</if>
+	limit ${startrom},${pagesize}
+</select>
+
+<sql id="joinSqlWhere">
+		<where>
+		<if test="id != null">
+				id = #{id}
+			</if>
+			<if test="terminal_id != null">
+				and terminal_id = #{terminal_id}
+			</if>
+			<if test="action != null">
+				and action like CONCAT('%',#{action,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="content != null">
+				and content = #{content}
+			</if>
+			<if test="result != null">
+				and result = #{result}
+			</if>
+			<if test="start_time != null">
+			  <![CDATA[and create_time >= #{start_time}]]>
+			</if>
+			<if test="end_time != null">
+			  <![CDATA[and create_time <= #{end_time}]]>
+			</if>
+		<if test="gids != null">
+		    and 
+		    <trim prefixOverrides="OR">
+				<foreach item="item" index="index" collection="gids"  open="" separator="" close="">
+	           		OR gids LIKE CONCAT('%',#{item,jdbcType=VARCHAR},'%')
+ 	        	</foreach>
+ 	        </trim>
+		</if>
+	 </where>
+</sql>
+
+
+	<sql id="sqlwhere">
+		<where>
+			<if test="id != null">
+				id = #{id}
+			</if>
+			<if test="terminal_id != null">
+				and terminal_id = #{terminal_id}
+			</if>
+			<if test="action != null">
+				and action like CONCAT('%',#{action,jdbcType=VARCHAR},'%')
+			</if>
+			<if test="content != null">
+				and content = #{content}
+			</if>
+			<if test="result != null">
+				and result = #{result}
+			</if>
+			<if test="start_time != null">
+			  <![CDATA[and create_time >= #{start_time}]]>
+			</if>
+			<if test="end_time != null">
+			  <![CDATA[and create_time <= #{end_time}]]>
+			</if>
+		</where>
+	</sql>
+
+
+</mapper>

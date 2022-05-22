@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>任务管理-博爻科技公司数字化多媒体系统</title>
+
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+    <META HTTP-EQUIV="Expires" CONTENT="0">
+
+    <meta name="renderer" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <link rel="stylesheet" href="../../static/css/font.css"/>
+    <link rel="stylesheet" href="../../static/css/weadmin.css"/>
+    <link rel="stylesheet" href="../../static/css/common.css">
+    <link rel="stylesheet" href="../../plugins/font-awesome-4.7.0/css/font-awesome.css">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <style type="text/css">
+        .layui-form-select dl{
+            /*display: block;*/
+            position:relative;
+            　　z-index:9999;
+            /*height: 200px;*/
+            top: 0;
+            /*bottom: 36px;*/
+        }
+        .layui-table-cell {
+
+            width:auto;
+            height: auto;/* layui-table 表格内容允许换行 */
+            overflow: visible !important;/* 防止下拉框的下拉列表被隐藏---必须设置--- */
+            text-overflow:inherit;
+            white-space:normal;
+            word-break: break-all;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<script type="text/html" id="toolbarAction">
+    <div class="align-space">
+        <div class="layui-btn-container">
+            <div id="batchDelTask" class="layui-col-xs layui-col-sm layui-col-md layui-btn layui-btn-sm layui-btn-danger" lay-event="batchDelTask">
+                <i class="fa fa-trash icon-margin"></i>批量删除
+            </div>
+            <div id="addTaskBtn" class="layui-col-xs layui-col-sm layui-col-md layui-btn layui-btn-sm" lay-event="addTaskBtn">
+                <i class="fa fa-plus icon-margin"></i>新增定时任务
+            </div>
+            <div id="exportTaskBtn" class="layui-col-xs layui-col-sm layui-col-md layui-btn layui-btn-sm" lay-event="exportTaskBtn">
+                <i class="fa fa-download icon-margin"></i>导出任务
+            </div>
+        </div>
+        <div class="color-red">点击任务列表单元个可单个设置</div>
+    </div>
+</script>
+
+<script type="text/html" id="taskActions">
+    <a class="layui-btn  layui-btn-xs　layui-btn-danger" lay-event="deltask">删除</a>
+    <a class="layui-btn  layui-btn-xs startStop" lay-event="startOrStop"></a>
+</script>
+
+
+<script type="text/html" id="selectTaskType">
+    <select  lay-filter="taskType" id="tasktype-row-{{d.task_id}}" {{d.ok_terminals.length >0?"disabled":""}}>
+        <option value="1"  {{ d.task_type ==1?'selected':''}}>文本类型</option>
+        <option value="2"  {{ d.task_type ==2?'selected':''}}>图片类型</option>
+        <option value="3"  {{ d.task_type ==3?'selected':''}}>音频类型</option>
+        <option value="4"  {{ d.task_type ==4?'selected':''}}>视频类型</option>
+    </select>
+</script>
+
+<script type="text/html" id="selectTaskPlayMode">
+    <select name="taskPlayMode" lay-filter="taskPlayMode" id="taskplaymode-row-{{d.task_id}}" {{d.ok_terminals.length >0?"disabled":""}}>
+        <option value="1"  {{ d.play_mode ==1?'selected':''}}>每天循环</option>
+        <option value="2"  {{ d.play_mode ==2?'selected':''}}>按周循环</option>
+        <option value="3"  {{ d.play_mode ==3?'selected':''}}>不循环</option>
+    </select>
+</script>
+
+<script type="text/html" id="selectTaskPriority">
+    <select name="taskPriority" lay-filter="taskPriority" id="taskpriority-row-{{d.task_id}}" {{d.ok_terminals.length >0?"disabled":""}}>
+        <option value="1"  {{ d.priority ==1?'selected':''}}>最低级</option>
+        <option value="2"  {{ d.priority ==2?'selected':''}}>较低级</option>
+        <option value="3"  {{ d.priority ==3?'selected':''}}>中级</option>
+        <option value="4"  {{ d.priority ==4?'selected':''}}>较高级</option>
+        <option value="5"  {{ d.priority ==5?'selected':''}}>最高级</option>
+    </select>
+</script>
+
+
+
+<div id="addExam" style="display: none;">
+    <form class="layui-form pop-body">
+        <div class="layui-form-item width-100">
+            <div class="layui-inline width-100">
+                <label class="layui-form-label">新的考试名字：</label>
+                <div class="layui-input-inline" style="width: 60%;">
+                    <input name="exam_name" class="layui-input" type="text" autocomplete="off" lay-verify="required|exam_name">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item width-100">
+            <div class="layui-inline width-100">
+                <label class="layui-form-label">新的考试编号：</label>
+                <div class="layui-input-inline" style="width: 60%;">
+                    <input name="exam_code" class="layui-input" type="text" autocomplete="off" lay-verify="required|exam_code">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item width-100">
+            <div class="layui-inline width-40">
+                <label class="layui-form-label">考试日期：</label>
+                <div class="layui-input-inline" style="width:100px;">
+                    <input type="text" name="exam_date" id="exam_date" lay-verify="required|exam_date" placeholder="yyyy-MM-dd" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">考试开始时间：</label>
+                <div class="layui-input-inline" style="width:100px;">
+                    <input type="text" name="start_time" id="start_time" lay-verify="required|time" placeholder="HH:mm:ss" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">考试结束时间：</label>
+                <div class="layui-input-inline" style="width:100px;">
+                    <input type="text" name="end_time" id="end_time" lay-verify="required|time" placeholder="HH:mm:ss" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-form-item align-center">
+            <div class="layui-input-inline width-100">
+                <button class="layui-btn" lay-filter="submitNewExam" lay-submit="">确定</button>
+            </div>
+        </div>
+
+    </form>
+
+</div>
+
+<div id="modifyTextContent" class="width-100" style="display:none;height:100%;">
+    <form class="layui-form colum-center" id="modifyTextForm" style="height:100%;">
+        <div id="textTitle" class="layui-form-item horizon-padding width-80" style="margin-top: 10px;height:15%;">
+            <label class="layui-form-label" style="margin-right:15px;width:10%;">文本标题:</label>
+            <div class="layui-input-inline" style="width:80%;height: 10%;">
+                <input name="textTitle" class="layui-input width-100" type="text" autocomplete="off"
+                       lay-verify="required|texttitle">
+            </div>
+        </div>
+        <div id="textBody" class="layui-form-item horizon-padding width-80" style="height:70%;">
+            <label class="layui-form-label" style="margin-right:15px;width:10%;">文本内容:</label>
+            <div class="layui-input-inline width-100" style="width:80%;height: 100%;">
+                <textarea name="textContent" class="layui-input content_textarea" type="text" autocomplete="off"
+                          lay-verify="required|texttitle"> </textarea>
+            </div>
+        </div>
+        <div class="layui-form-item horizon-padding">
+            <div class="layui-input-block align-center">
+                <div class="layui-btn" id="submit-textcontent">立即提交</div>
+                <div id="clearTextContent" class="layui-btn layui-btn-primary">清空</div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<div id="modifyMediaContent" class="width-100" style="display:none;margin-bottom: 20px;">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend></legend>
+    </fieldset>
+    <div class="align-space horizon-padding">
+        <div id="mediaTransfer" style="width:75%;"></div>
+        <div class="noticeText">
+            <textarea id="noticeTextArea" placeholder="请在这里输入滚动说明字幕文本" style="height: 100%"></textarea>
+        </div>
+    </div>
+    <div class="align-center verical-margin">
+        <div id="submitMediaContent" class="layui-btn align-center">确认</div>
+    </div>
+</div>
+
+
+<div id="setTerminals" class="width-100" style="display:none;margin-bottom: 20px;">
+
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>请选择分组或者终端(未在线终端不可选)</legend>
+    </fieldset>
+    <div id="terminalGrpTree" class="demo-tree"></div>
+</div>
+
+
+
+<div id="modifyTaskTime" style="display: none;">
+    <form class="layui-form colum-center" id="modifyTimeForm">
+        <div id="timeSection-1" class="layui-form-item horizon-padding" style="margin-top: 10px;">
+            <label name="lable-sec" class="layui-form-label">时间段1</label>
+            <label name="label-start" class="layui-form-label">开始：</label>
+            <div class="layui-input-inline" style="width:80px;">
+                <input name="starttime-1" class="layui-input" style="width:100px;" type="text" autocomplete="off"
+                       lay-verify="required|starttime">
+            </div>
+
+            <label name="label-end" class="layui-form-label">结束：</label>
+            <div class="layui-input-inline" style="width:80px;">
+                <input name="endtime-1" class="layui-input" style="width:100px;" type="text" autocomplete="off"
+                       lay-verify="required|endtime">
+            </div>
+            <label class="layui-form-label">播放次数：</label>
+            <div class="layui-input-inline" style="width:140px;">
+                <input name="playcount-1" class="layui-input" style="width:140px;" type="number" min="0"
+                       placeholder="0是循环播放" autocomplete="off" lay-verify="required|endtime">
+            </div>
+            <label name="delTimeBtn-1" class="layui-form-label color-red">删除</label>
+        </div>
+        <div id="addTimeBtn" class="layui-form-item horion-padding">
+            <div class="layui-input-inline">
+                <label class="layui-form-label color-btn">+新增时间段</label>
+            </div>
+        </div>
+
+        <div class="layui-form-item horion-padding">
+            <div class="layui-input-block align-center">
+                <div class="layui-btn" id="submit-playtime" lay-submit="">立即提交</div>
+            </div>
+        </div>
+
+    </form>
+
+</div>
+
+
+<div id="weekCheck" style="display: none;">
+    <form class="layui-form " id="weekCheckForm">
+        <div class="layui-form-item">
+            <label class="layui-form-label">当前已选:</label>
+            <div id="weekChoiceList" class="layui-input-block layui-col-xs layui-col-sm layui-col-md align-center">
+            </div>
+        </div>
+        <div class="layui-form-item horion-padding">
+            <div class="layui-input-block align-center">
+                <div class="layui-btn" id="submit-week">确定修改</div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<div class="weadmin-nav">
+			<span class="layui-breadcrumb">
+				<a id="title-1" href="javascript:;">首页</a> <a id="title-2" href="javascript:;">任务管理</a>
+				<a id="title-3" href="javascript:;"> <cite>任务列表</cite></a>
+			</span>
+</div>
+
+<div class="layui-fluid verical-margin" class="layui-container">
+    <div id="bodyContainer">
+        <div class="width-100">
+            <div id="examTitleInfo" style="display:none;">
+                <div id="tableTitle" class="align-center" style="margin-top:15px;font-weight: bold;"></div>
+                <div class="align-center" style="margin:10px;">
+                    <div class="layui-inline width-40">
+                        <label class="layui-form-label">考试日期：</label>
+                        <div class="layui-input-inline" style="width:100px;">
+                            <input type="text" name="exam_startdate" id="exam_startdate" lay-verify="required|exam_date" placeholder="请点击设置" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">考试时间：</label>
+                        <div class="layui-input-inline" style="width:100px;">
+                            <input type="text" name="exam_start" id="exam_start1" lay-verify="required|time" placeholder="请点击设置" autocomplete="off" class="layui-input">
+                        </div>
+                        到
+                        <div class="layui-input-inline" style="width:100px;">
+                            <input type="text" name="exam_end" id="exam_end1" lay-verify="required|time" placeholder="请点击设置" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">考试倒计时开始时间：</label>
+                        <div class="layui-input-inline" style="width:100px;">
+                            <input type="text" name="count_down" id="count_down" lay-verify="required|time" placeholder="请点击设置" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+
+                    <form class="layui-form">
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <input type="checkbox" id="playtime_liandong" name="playtime" lay-skin="primary" lay-filter="liandong_time" title="联动设置执行时间段">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <table id="taskList" class="layui-hide" lay-filter="taskList"></table>
+            <div id="pages">
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!--<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>-->
+<script src="../../lib/layui/layui.js" charset="utf-8"></script>
+<script src="../../static/js/eleDel.js" type="text/javascript" charset="utf-8"></script>
+　　
+<script src="./task.js" type="text/javascript" charset="utf-8">
+
+
+</script>
+</body>
+</html>

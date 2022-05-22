@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  -->
+<mapper namespace="ExamInfoTpl">
+<resultMap id="ExamInfoTplResult" type="java.util.HashMap">
+	<result column="id" property="id" jdbcType="BIGINT"/>
+	<result column="exam_id" property="exam_id" jdbcType="VARCHAR"/>
+	<result column="exam_code" property="exam_code" jdbcType="VARCHAR"/>
+	<result column="exam_name" property="exam_name" jdbcType="VARCHAR"/>
+	<result column="start_date" property="start_date" jdbcType="VARCHAR"/>
+	<result column="end_date" property="end_date" jdbcType="VARCHAR"/>
+	<result column="am_start_time" property="am_start_time" jdbcType="VARCHAR"/>
+	<result column="am_end_time" property="am_end_time" jdbcType="VARCHAR"/>
+	<result column="pm_start_time" property="pm_start_time" jdbcType="VARCHAR"/>
+	<result column="pm_end_time" property="pm_end_time" jdbcType="VARCHAR"/>
+	<result column="count_down" property="count_down" jdbcType="INTEGER"/>
+	<result column="creator" property="creator" jdbcType="VARCHAR"/>
+	<result column="creator_uid" property="creator_uid" jdbcType="VARCHAR"/>
+	<result column="templete_tasks" property="templete_tasks" jdbcType="VARCHAR"/>
+	<result column="create_time" property="create_time" jdbcType="TIMESTAMP"/>
+</resultMap>
+<resultMap id="ExamInfoTplResultEntity" type="bzl.entity.ExamInfoTpl">
+	<result column="id" property="id" jdbcType="BIGINT"/>
+	<result column="exam_id" property="exam_id" jdbcType="VARCHAR"/>
+	<result column="exam_code" property="exam_code" jdbcType="VARCHAR"/>
+	<result column="exam_name" property="exam_name" jdbcType="VARCHAR"/>
+	<result column="start_date" property="start_date" jdbcType="VARCHAR"/>
+	<result column="end_date" property="end_date" jdbcType="VARCHAR"/>
+	<result column="am_start_time" property="am_start_time" jdbcType="VARCHAR"/>
+	<result column="am_end_time" property="am_end_time" jdbcType="VARCHAR"/>
+	<result column="pm_start_time" property="pm_start_time" jdbcType="VARCHAR"/>
+	<result column="pm_end_time" property="pm_end_time" jdbcType="VARCHAR"/>
+	<result column="count_down" property="count_down" jdbcType="INTEGER"/>
+	<result column="creator" property="creator" jdbcType="VARCHAR"/>
+	<result column="creator_uid" property="creator_uid" jdbcType="VARCHAR"/>
+	<result column="templete_tasks" property="templete_tasks" jdbcType="VARCHAR"/>
+	<result column="create_time" property="create_time" jdbcType="TIMESTAMP"/>
+</resultMap>
+<parameterMap id="ExamInfoTplParam" type="java.util.HashMap">
+</parameterMap>
+<parameterMap id="ExamInfoTplEntity" type="bzl.entity.ExamInfoTpl">
+</parameterMap>
+<sql id="mysql">
+		id,exam_id,exam_code,exam_name,start_date,end_date,am_start_time,am_end_time,pm_start_time,pm_end_time,count_down,creator,creator_uid,templete_tasks,create_time
+</sql>
+<select id="selectByPK" parameterMap="ExamInfoTplParam"
+resultMap="ExamInfoTplResult">
+  	 	select <include refid="mysql"/> from t_examinfo_tpl where exam_id = #{exam_id}
+</select>
+<select id="selectAll" resultMap="ExamInfoTplResult">
+  	select <include refid="mysql"/> from t_examinfo_tpl
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+</select>
+<!-- 动态查询 -->
+<select id="selectByCondition" parameterMap="ExamInfoTplParam" resultMap="ExamInfoTplResult">
+	select <include refid="mysql"/> from t_examinfo_tpl
+		<include refid="sqlwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+</select>
+<!-- 动态sql -->
+<select id="selectCountByCondition" parameterMap="ExamInfoTplParam" resultType="java.util.HashMap">
+	select count(1) count from t_examinfo_tpl
+	<include refid="sqlwhere"/>
+</select>
+<!-- 动态获得本页统计 -->
+<select id="selectPageCountByCondition" parameterMap="ExamInfoTplParam" resultType="java.util.HashMap">
+	select count(1) count from userinfo
+	<include refid="sqlwhere"/>
+	limit ${startrom},${pagesize}
+	</select>
+<!-- 动态分页sql -->
+<select id="selectByConditionWithPage" parameterMap="ExamInfoTplParam" resultMap="ExamInfoTplResult">
+	select <include refid="mysql"/> from t_examinfo_tpl
+	<include refid="sqlwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+		</if>
+	<if test="order != null">
+			${order}
+	</if>
+	limit ${startrom},${pagesize}
+</select>
+<!-- 动态统计已删除记录-->
+<select id="selectDelCountByCondition" parameterMap="ExamInfoTplParam" resultType="java.util.HashMap">
+	select count(1) count from t_examinfo_tpl
+	<include refid="delwhere"/>
+</select>
+<!-- 动态查询已删除记录分页-->
+<select id="selectDelByConditionWithPage" parameterMap="ExamInfoTplParam" resultMap="ExamInfoTplResult">
+	select <include refid="mysql"/> from t_examinfo_tpl
+	<include refid="delwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+	limit ${startrom},${pagesize}
+</select>
+<insert id="insert" parameterMap="ExamInfoTplParam" useGeneratedKeys="true">
+<![CDATA[
+   insert into t_exam_info(exam_id,exam_code,exam_name,start_date,end_date,am_start_time,am_end_time,pm_start_time,pm_end_time,count_down,creator,creator_uid,templete_tasks) values(#{exam_id},#{exam_code},#{exam_name},#{start_date},#{end_date},#{am_start_time},#{am_end_time},#{pm_start_time},#{pm_end_time},#{count_down},#{creator},#{creator_uid},#{templete_tasks})
+    ]]>
+</insert>
+<delete id="delete" parameterMap="ExamInfoTplParam">
+  <![CDATA[
+    delete from t_examinfo_tpl where exam_id = #{exam_id}
+  ]]>
+</delete>
+<!-- 批量删除 -->
+<delete id="deleteBat" parameterMap="ExamInfoTplParam">
+    delete from t_examinfo_tpl where
+     	exam_id in 
+		<foreach item="item" index="index" collection="exam_ids"  open="(" separator="," close=")">
+	      #{item}
+ 	 </foreach>
+ </delete>
+<!-- 动态更新 -->
+<update id="update"  parameterMap="ExamInfoTplParam">
+	update t_examinfo_tpl 
+	<set>
+		<if test="exam_name != null">
+			exam_name = #{exam_name},
+		</if>
+		<if test="exam_code != null">
+			exam_code = #{exam_code},
+		</if>
+		<if test="exam_date != null">
+			exam_date = #{exam_date},
+		</if>
+		<if test="start_time != null">
+			start_time = #{start_time},
+		</if>
+		<if test="end_time != null">
+			end_time = #{end_time},
+		</if>
+		<if test="count_down != null">
+			count_down = #{count_down}
+		</if>
+	</set>
+	where exam_id = #{exam_id}
+</update>
+<sql id="sqlwhere">
+	<where>
+	     <if test="exam_id != null">
+			 exam_id = #{exam_id}
+		</if>
+		<if test="exam_code != null">
+			 and exam_code = #{exam_code}
+		</if>
+		<if test="exam_name != null">
+			 and exam_name = #{exam_name}
+		</if>
+		<if test="exam_date != null">
+			and exam_date = #{exam_date}
+		</if>
+		<if test="creator_uid != null">
+			and creator_uid = #{creator_uid}
+		</if>
+		<if test="creator_uids != null">
+			 and creator_uid in
+			<foreach item="item" index="index" collection="creator_uids"  open="(" separator="," close=")">
+	            #{item}
+ 	        </foreach>
+		</if>
+		
+	</where>
+</sql>
+<sql id="delwhere">
+	<where>
+	     <if test="exam_id != null">
+			 exam_id = #{exam_id}
+		</if>
+		<if test="exam_code != null">
+			 and exam_code = #{exam_code}
+		</if>
+		<if test="exam_name != null">
+			 and exam_name = #{exam_name}
+		</if>
+		<if test="exam_date != null">
+			and exam_date = #{exam_date}
+		</if>
+		<if test="creator_uid != null">
+			and creator_uid = #{creator_uid}
+		</if>
+		<if test="creator_uids != null">
+			 and creator_uid in
+			<foreach item="item" index="index" collection="creator_uids"  open="(" separator="," close=")">
+	            #{item}
+ 	        </foreach>
+		</if>
+	 </where>
+</sql>
+<!-- 验证唯一 -->
+<select id="judgeonly" parameterMap="ExamInfoTplParam" resultType="java.util.HashMap">
+	select distinct if(exists(select id from t_examinfo_tpl
+	<where>
+		<if test="exam_code != null">
+			 exam_code = #{exam_code}
+		</if>
+	</where>
+	
+	),1,0) as flag from t_examinfo_tpl
+</select>
+
+</mapper>

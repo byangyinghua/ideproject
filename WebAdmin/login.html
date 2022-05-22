@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>博爻科技公司数字化多媒体系统</title>
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon"/>
+    <link rel="stylesheet" href="./static/css/font.css">
+    <link rel="stylesheet" href="./static/css/weadmin.css">
+    <link rel="stylesheet" href="./static/css/common.css">
+    <script src="./lib/layui/layui.js" charset="utf-8"></script>
+    <script src="./static/js/server_api.js" charset="utf-8"></script>
+
+    <script>
+        function getYanzhenma(){
+        	    var timestamp = new Date().getTime();
+        	    var baseUrl = "http://" + window.location.host;
+                document.getElementById('code_image').src = baseUrl + "/cms/account/get_yzm/" +timestamp;
+                //console.log("document.getElementById('code_image').src=" + document.getElementById('code_image').src);
+            };
+            window.onload=getYanzhenma;
+    </script>
+
+</head>
+<!--<body class="" style="overflow-x:hidden;overflow-y:hidden;">-->
+<body class="" style="background-color: rgb(51,67,87);overflow-x:hidden;overflow-y:hidden;">
+<div class="align-center" style="font-size: 36px;margin-top:5%;">
+    <img src="./static/images/logo.png" width="60" height="46">
+    <label style="color:white;">博爻科技公司数字化多媒体系统</label>
+</div>
+<div class="login">
+    <form method="post" class="layui-form">
+        <div class="layui-form-item">
+            <div class="layui-input-inline" style="width: 100%;">
+                <input name="username" placeholder="用户名" type="text" lay-verify="required" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-inline" style="width: 100%;">
+                <input name="password" lay-verify="required" placeholder="密码" type="password" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item show_yzm">
+            <div class="layui-input-inline"  style="width: 80%;">
+                <input name="yzm" lay-verify="required" placeholder="验证码" 　type="text" class="layui-input">
+            </div>
+            <img onclick="javascript:getYanzhenma()" id="code_image" src="" 　>
+        </div>
+
+        <hr class="hr20">
+        <input class="loginin" value="登录" lay-submit lay-filter="login" style="width:100%;" type="submit">
+
+    </form>
+</div>
+<div class="footer">
+    <div class="copyright"></div>
+</div>
+
+
+<script type="text/javascript">
+        	layui.extend({
+				admin: '{/}./static/js/admin',
+				server_api:'{/}./static/js/server_api',
+			});
+            layui.use(['jquery','form','admin','server_api'], function(){
+              var form = layui.form,
+                $ = layui.jquery
+              	,admin = layui.admin
+              	,server_api = layui.server_api;
+              //监听提交
+              form.on('submit(login)', function(data){
+                console.log(data);
+                if(server_api.userLogin){
+                   　var postData = data.field;
+                    server_api.userLogin(JSON.stringify(postData),function(resp){
+                     if(resp.status ==0){
+                         location.href='./index.html'
+                     }else if(resp.status==4){//用户已经在别处登录
+                         layer.confirm(resp.msg + "是否强制登录!",{icon: 3, title:'提示'},function (resp) {
+                             postData.force_login="force_login"
+                             server_api.userLogin(JSON.stringify(postData),function(resp){
+                                 if(resp.status ==0){
+                                     location.href='./index.html'
+                                 }else{
+                                     layer.msg(resp.msg,{icon:2});
+                                 }
+                             })
+                         })
+                     } else{
+                      layer.msg(resp.msg,{icon:2});
+                     }
+                });
+                }else{
+                   console.log("server_api.login not ok!");
+                }
+
+                return false;
+              });
+
+              $(function () {
+                  var myDate = new Date();
+                  var tYear = myDate.getFullYear();
+                  var tYear1 = tYear-1;
+
+                  var copyrightText = "Copyright ©" +tYear1 + "-" + tYear +  " 贵阳博爻科技 All Rights Reserved"
+
+                  $(".copyright").text(copyrightText)
+              })
+
+            });
+
+</script>
+<!-- 底部结束 -->
+</body>
+</html>

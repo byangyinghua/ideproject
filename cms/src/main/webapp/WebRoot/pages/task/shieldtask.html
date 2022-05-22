@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>屏蔽任务管理-博爻科技公司数字化多媒体系统</title>
+
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+    <META HTTP-EQUIV="Expires" CONTENT="0">
+
+    <meta name="renderer" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <link rel="stylesheet" href="../../static/css/font.css"/>
+    <link rel="stylesheet" href="../../static/css/weadmin.css"/>
+    <link rel="stylesheet" href="../../static/css/common.css">
+    <link rel="stylesheet" href="../../plugins/font-awesome-4.7.0/css/font-awesome.css">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<script type="text/html" id="toolbarAction">
+    <div class="align-space">
+        <div class="layui-btn-container">
+            <button id="batchDelTask" class="layui-col-xs layui-col-sm layui-col-md layui-btn layui-btn-sm layui-btn layui-btn-danger" lay-event="batchDelTask">
+                <i class="fa fa-trash icon-margin"></i>批量删除
+            </button>
+            <button id="addTaskBtn" class="layui-col-xs layui-col-sm layui-col-md layui-btn layui-btn-sm" lay-event="addTaskBtn">
+                <i class="fa fa-plus icon-margin"></i>新增屏蔽任务
+            </button>
+        </div>
+        <div class="color-red">点击任务列表单元个可单个设置</div>
+    </div>
+</script>
+
+<script type="text/html" id="shieldActions">
+    <a class="layui-btn  layui-btn-xs　layui-btn-danger" lay-event="deltask">删除</a>
+    <!--<a class="layui-btn  layui-btn-xs　startStop" lay-event="startOrStop"></a>-->
+</script>
+
+<div id="setTerminals" class="width-100" style="display:none;margin-bottom: 20px;">
+
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>请选择分组或者终端(不在线终端不可选)</legend>
+    </fieldset>
+
+    <div id="terminalGrpTree" class="demo-tree"></div>
+    <!--<div id="confirmTerminals" class="align-center verical-margin">-->
+        <!--<div class="layui-btn">确定</div>-->
+    <!--</div>-->
+
+</div>
+
+<div id="weekCheck" style="display: none;">
+    <div class="layui-form " id="weekCheckForm">
+        <div class="layui-form-item">
+            <label class="layui-form-label">当前已选:</label>
+            <div id="weekChoiceList" class="layui-input-block align-center">
+            </div>
+        </div>
+        <div class="layui-form-item horion-padding">
+            <div class="layui-input-block align-center">
+                <div class="layui-btn" id="submit-week">确定修改</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="weadmin-nav">
+			<span class="layui-breadcrumb">
+				<a href="javascript:;">首页</a> <a href="javascript:;">任务管理</a>
+				<a href="javascript:;"> <cite>屏蔽任务</cite></a>
+			</span>
+</div>
+
+<div class="layui-fluid">
+    <table id="shieldTaskList" class="layui-table" lay-filter="shieldTaskList"></table>
+    <div id="pages">
+    </div>
+</div>
+
+
+
+<script src="../../lib/layui/layui.js" charset="utf-8"></script>
+<script src="./shiedltask.js" type="text/javascript" charset="utf-8"></script>
+</body>
+
+</html>

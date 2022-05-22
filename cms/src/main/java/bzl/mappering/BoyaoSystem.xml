@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- -->
+<mapper namespace="BoyaoSystem">
+	<resultMap id="BoyaoSystemResult" type="java.util.HashMap">
+		<result column="id" property="id" jdbcType="BIGINT" />
+		<result column="info_id" property="info_id"
+			jdbcType="VARCHAR" />
+		<result column="key_word" property="key_word"
+			jdbcType="VARCHAR" />
+		<result column="content" property="content"
+			jdbcType="VARCHAR" />
+		<result column="create_time" property="create_time"
+			jdbcType="DATE" />
+		<result column="update_time" property="update_time"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="BoyaoSystemResultEntity" type="bzl.entity.BoyaoSystem">
+		<result column="id" property="id" jdbcType="BIGINT" />
+		<result column="info_id" property="info_id"
+			jdbcType="VARCHAR" />
+		<result column="key_word" property="key_word"
+			jdbcType="VARCHAR" />
+		<result column="content" property="content"
+			jdbcType="VARCHAR" />
+		<result column="create_time" property="create_time"
+			jdbcType="DATE" />
+		<result column="update_time" property="update_time"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+	<parameterMap id="BoyaoSystemParam" type="java.util.HashMap">
+	</parameterMap>
+	<parameterMap id="BoyaoSystemEntity" type="bzl.entity.BoyaoSystem">
+	</parameterMap>
+	<sql id="mysql">
+		id,info_id,key_word,content,create_time,update_time
+	</sql>
+	<select id="selectByPK" parameterMap="BoyaoSystemParam"
+		resultMap="BoyaoSystemResult">
+		select
+		<include refid="mysql" />
+		from t_system_info where info_id = #{info_id}
+	</select>
+	<select id="selectAll" resultMap="BoyaoSystemResult">
+		select
+		<include refid="mysql" />
+		from t_system_info
+		<if test="sort != null">
+			order by ${sort}
+		</if>
+		<if test="order != null">
+			${order}
+		</if>
+	</select>
+	<!-- 动态查询 -->
+	<select id="selectByCondition" parameterMap="BoyaoSystemParam"
+		resultMap="BoyaoSystemResult">
+		select
+		<include refid="mysql" />
+		from t_system_info
+		<include refid="sqlwhere" />
+		<if test="sort != null">
+			order by ${sort}
+		</if>
+		<if test="order != null">
+			${order}
+		</if>
+	</select>
+	<!-- 动态sql -->
+	<select id="selectCountByCondition" parameterMap="BoyaoSystemParam"
+		resultType="java.util.HashMap">
+		select count(1) count from t_system_info
+		<include refid="sqlwhere" />
+	</select>
+	<!-- 动态获得本页统计 -->
+	<select id="selectPageCountByCondition"
+		parameterMap="BoyaoSystemParam" resultType="java.util.HashMap">
+		select count(1) count from t_system_info
+		<include refid="sqlwhere" />
+		limit ${startrom},${pagesize}
+	</select>
+	<!-- 动态分页sql -->
+	<select id="selectByConditionWithPage"
+		parameterMap="BoyaoSystemParam" resultMap="BoyaoSystemResult">
+		select
+		<include refid="mysql" />
+		from t_system_info
+		<include refid="sqlwhere" />
+		<if test="sort != null">
+			order by ${sort}
+		</if>
+		<if test="order != null">
+			${order}
+		</if>
+		limit ${startrom},${pagesize}
+	</select>
+
+	<insert id="insert" parameterMap="BoyaoSystemParam"
+		useGeneratedKeys="true">
+<![CDATA[
+      insert into t_system_info(info_id,key_word,content,create_time) values(#{info_id},#{key_word},#{content},#{create_time})
+    ]]>
+	</insert>
+	<delete id="delete" parameterMap="BoyaoSystemParam">
+  <![CDATA[
+    delete from t_system_info where info_id = #{info_id}
+  ]]>
+	</delete>
+	<!-- 批量删除 -->
+	<delete id="deleteBat" parameterMap="BoyaoSystemParam">
+		delete from t_system_info where
+		BoyaoSystem_ip in
+		<foreach item="item" index="index" collection="BoyaoSystem_ips"
+			open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		and  info_id = #{info_id}
+	</delete>
+	<!-- 动态更新 -->
+	<update id="update" parameterMap="BoyaoSystemParam">
+		update t_system_info
+		<set>
+			<if test="content != null">
+				content = #{content},
+			</if>
+		</set>
+		where key_word = #{key_word}
+	</update>
+	<sql id="sqlwhere">
+		<where>
+			<if test="info_id != null">
+				info_id = #{info_id}
+			</if>
+			<if test="key_word != null">
+				and key_word = #{key_word}
+			</if>
+		</where>
+	</sql>
+	<!-- 验证唯一 -->
+	<select id="judgeonly" parameterMap="BoyaoSystemParam"
+		resultType="java.util.HashMap">
+		select distinct if(exists(select id from t_system_info
+		<where>
+			<if test="BoyaoSystem_id != null">
+				info_id = #{info_id}
+			</if>
+		</where>
+
+		),1,0) as flag from t_system_info
+	</select>
+
+</mapper>

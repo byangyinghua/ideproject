@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>求助列表-博爻科技公司数字化多媒体系统</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../static/css/font.css">
+    <link rel="stylesheet" href="../../static/css/weadmin.css">
+    <link rel="stylesheet" href="../../static/css/common.css">
+    <link rel="stylesheet" href="../../plugins/font-awesome-4.7.0/css/font-awesome.css">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<script type="text/html" id="toolbarAction">
+    <!--<a class="layui-btn" lay-event="send2Terminal">下达预警</a>-->
+    <!--<a class="layui-btn" lay-event="cancelShield">停止预警</a>-->
+    <!--<a class="layui-btn" lay-event="send2Terminal">下达任务</a>-->
+    <!--<a class="layui-btn" lay-event="cancelShield">停止任务</a>-->
+</script>
+
+<script type="text/html" id="helpActions">
+    <a class="layui-btn  layui-btn-xs" lay-event="view-video">调取实时视频</a>
+</script>
+
+<div class="weadmin-nav">
+			<span class="layui-breadcrumb">
+		        <a href="">首页</a>
+		        <a href="">终端求助</a>
+		        <a><cite>处理求助</cite></a>
+		    </span>
+</div>
+
+
+<div id="videoList" class="width-100 align-center" style="display:none;margin-bottom: 20px;margin-top:20px;margin-right:20px;">
+    <div class="width-50">
+        <fieldset class="layui-elem-field layui-field-title">
+            <legend>请选择录像文件</legend>
+        </fieldset>
+        <div id="videoListTree"></div>
+    </div>
+
+    <div class="width-50">
+        <label id="currentPlay">当前查看的视频是：</label>
+        <div>
+            <video src="" controls="controls" style="width:90%;height: 90%;">
+                您的
+            </video>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="weadmin-body">
+    <table id="terminalHelpList" class="layui-table" lay-filter="terminalHelpList"></table>
+    <div id="pages">
+    </div>
+</div>
+<script src="../../lib/layui/layui.js" charset="utf-8"></script>
+<script src="./terHelp.js" type="text/javascript" charset="utf-8"></script>
+</body>
+
+</html>

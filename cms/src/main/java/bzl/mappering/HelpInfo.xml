@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--  -->
+<mapper namespace="HelpInfo">
+<resultMap id="HelpInfoResult" type="java.util.HashMap">
+	<result column="id" property="id" jdbcType="BIGINT"/>
+	<result column="help_id" property="help_id" jdbcType="VARCHAR"/>
+	<result column="terminal_id" property="terminal_id" jdbcType="VARCHAR"/>
+	<result column="sent_task" property="sent_task" jdbcType="VARCHAR"/>
+	<result column="terminal_ip" property="terminal_ip" jdbcType="CHAR"/>
+	<result column="help_time" property="help_time" jdbcType="DATE"/>
+	<result column="help_status" property="help_status" jdbcType="VARCHAR"/>
+	<result column="video_list" property="video_list" jdbcType="TINYINT"/>
+	<result column="create_time" property="create_time" jdbcType="TIMESTAMP"/>
+</resultMap>
+<resultMap id="HelpInfoResultEntity" type="bzl.entity.HelpInfo">
+	<result column="id" property="id" jdbcType="BIGINT"/>
+	<result column="help_id" property="help_id" jdbcType="VARCHAR"/>
+	<result column="terminal_id" property="terminal_id" jdbcType="VARCHAR"/>
+	<result column="sent_task" property="sent_task" jdbcType="VARCHAR"/>
+	<result column="terminal_ip" property="terminal_ip" jdbcType="CHAR"/>
+	<result column="help_time" property="help_time" jdbcType="DATE"/>
+	<result column="help_status" property="help_status" jdbcType="VARCHAR"/>
+	<result column="video_list" property="video_list" jdbcType="TINYINT"/>
+	<result column="create_time" property="create_time" jdbcType="TIMESTAMP"/>
+</resultMap>
+<parameterMap id="HelpInfoParam" type="java.util.HashMap">
+</parameterMap>
+<parameterMap id="HelpInfoEntity" type="bzl.entity.HelpInfo">
+</parameterMap>
+<sql id="mysql">
+	id,help_id,terminal_id,sent_task,terminal_ip,help_time,help_status,video_list,create_time
+</sql>
+<select id="selectByPK" parameterMap="HelpInfoParam"
+resultMap="HelpInfoResult">
+  	 	select <include refid="mysql"/> from t_help_info where  help_id = #{help_id}
+</select>
+<select id="selectAll" resultMap="HelpInfoResult">
+  	select <include refid="mysql"/> from t_help_info where
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+</select>
+<!-- 动态查询 -->
+<select id="selectByCondition" parameterMap="HelpInfoParam" resultMap="HelpInfoResult">
+	select <include refid="mysql"/> from t_help_info
+		<include refid="sqlwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+</select>
+<!-- 动态sql -->
+<select id="selectCountByCondition" parameterMap="HelpInfoParam" resultType="java.util.HashMap">
+	select count(1) count from t_help_info
+	<include refid="sqlwhere"/>
+</select>
+<!-- 动态获得本页统计 -->
+<select id="selectPageCountByCondition" parameterMap="HelpInfoParam" resultType="java.util.HashMap">
+	select count(1) count from t_help_info
+	<include refid="sqlwhere"/>
+	limit ${startrom},${pagesize}
+	</select>
+<!-- 动态分页sql -->
+<select id="selectByConditionWithPage" parameterMap="HelpInfoParam" resultMap="HelpInfoResult">
+	select <include refid="mysql"/> from t_help_info
+	<include refid="sqlwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+		</if>
+	<if test="order != null">
+			${order}
+	</if>
+	limit ${startrom},${pagesize}
+</select>
+<!-- 动态统计已删除记录-->
+<select id="selectDelCountByCondition" parameterMap="HelpInfoParam" resultType="java.util.HashMap">
+	select count(1) count from t_help_info
+	<include refid="delwhere"/>
+</select>
+<!-- 动态查询已删除记录分页-->
+<select id="selectDelByConditionWithPage" parameterMap="HelpInfoParam" resultMap="HelpInfoResult">
+	select <include refid="mysql"/> from t_help_info
+	<include refid="delwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+	limit ${startrom},${pagesize}
+</select>
+<insert id="insert" parameterMap="HelpInfoParam" useGeneratedKeys="true">
+<![CDATA[
+      insert into t_help_info(help_id,terminal_id,sent_task,terminal_ip,help_time,help_status,video_list) values(#{help_id},#{terminal_id},#{sent_task},#{terminal_ip},#{help_time},#{help_status},#{video_list})
+    ]]>
+</insert>
+<delete id="delete" parameterMap="HelpInfoParam">
+  <![CDATA[
+    delete from t_help_info where help_id = #{help_id}
+  ]]>
+</delete>
+<!-- 批量删除 -->
+<delete id="deleteBat" parameterMap="HelpInfoParam">
+    delete from t_help_info where
+     	id in 
+		<foreach item="item" index="index" collection="id"  open="(" separator="," close=")">
+	      #{item}
+ 	 </foreach>
+ </delete>
+<!-- 批量伪删除 -->
+<update id="updateStatus"  parameterMap="HelpInfoParam">
+    <foreach collection="id" item="item" index="index" open="" close="" separator=";">
+		update t_help_info 
+		<set>
+		<if test="del_status != null">
+			del_status = #{del_status},
+		</if>
+		</set>
+		where id = #{item}
+   </foreach>
+ </update>
+<!-- 动态更新 -->
+<update id="update"  parameterMap="HelpInfoParam">
+	update t_help_info 
+	<set>
+		<if test="help_status != null">
+			help_status = #{help_status},
+		</if>
+		<if test="video_list != null">
+			video_list = #{video_list}
+		</if>
+	</set>
+	where help_id = #{help_id}
+</update>
+
+<select id="countByTerminalGid" resultMap="HelpInfoResult">
+    select count(1) count
+    FROM
+    `t_help_info` h
+    LEFT JOIN `t_terminal` t ON h.terminal_id = t.terminal_id
+   <include refid="joinSqlWhere"/>
+</select>
+
+
+<select id="selectByTerminalGidByPage" resultMap="HelpInfoResult">
+    SELECT h.id,h.help_id,h.terminal_id,h.sent_task,h.terminal_ip,h.help_time,h.help_status,h.video_list,h.create_time
+    FROM
+    `t_help_info` h
+    LEFT JOIN `t_terminal` t ON h.terminal_id = t.terminal_id
+   <include refid="joinSqlWhere"/>
+   	<if test="sort != null">
+		order by ${sort}
+		</if>
+	<if test="order != null">
+			${order}
+	</if>
+	limit ${startrom},${pagesize}
+</select>
+
+<sql id="joinSqlWhere">
+		<where>
+		<if test="help_id != null">
+			 help_id = #{help_id}
+		</if>
+		<if test="help_time != null">
+			 and help_time = #{help_time}
+		</if>
+		<if test="help_status != null">
+			 and help_status = #{help_status}
+		</if>
+		<if test="video_list != null">
+			 and video_list = #{video_list}
+		</if>
+		<if test="gids != null">
+		    and 
+		    <trim prefixOverrides="OR">
+				<foreach item="item" index="index" collection="gids"  open="" separator="" close="">
+	           		OR gids LIKE CONCAT('%',#{item,jdbcType=VARCHAR},'%')
+ 	        	</foreach>
+ 	        </trim>
+		</if>
+	 </where>
+</sql>
+
+
+<sql id="sqlwhere">
+	<where>
+		<if test="help_id != null">
+			 help_id = #{help_id}
+		</if>
+		<if test="help_time != null">
+			 and help_time = #{help_time}
+		</if>
+		<if test="help_status != null">
+			 and help_status = #{help_status}
+		</if>
+		<if test="video_list != null">
+			 and video_list = #{video_list}
+		</if>
+	</where>
+</sql>
+<sql id="delwhere">
+	<where>
+	 	<if test="help_id != null">
+			 help_id = #{help_id}
+		</if>
+		<if test="help_time != null">
+			 and help_time = #{help_time}
+		</if>
+		<if test="help_status != null">
+			 and help_status = #{help_status}
+		</if>
+		<if test="video_list != null">
+			 and video_list = #{video_list}
+		</if>
+	 </where>
+</sql>
+<!-- 验证唯一 -->
+<select id="judgeonly" parameterMap="HelpInfoParam" resultType="java.util.HashMap">
+	select distinct if(exists(select uid from t_help_info
+	<where>
+		<if test="help_id != null">
+			 help_id = #{help_id}
+		</if>
+	</where>
+	
+	),1,0) as flag from t_help_info
+</select>
+
+</mapper>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+  <properties resource="properties/jdbc.properties"/>
+  <environments default="development">
+    <environment id="development">
+      <transactionManager type="JDBC"/>
+      <dataSource type="POOLED">
+        <property name="driver" value="${driver}"/>
+        <property name="url" value="${url}"/>
+        <property name="username" value="${username}"/>
+        <property name="password" value="${password}"/>
+        <property name="poolPingEnabled" value="true"/>
+        <property name="poolPingQuery" value="select 1"/>
+        <property name="poolPingConnectionsNotUsedFor" value="3600000"/>
+      </dataSource>
+    </environment>
+  </environments>
+  <mappers>
+    <!-- 映射文件的位置 -->
+  
+
+    <mapper resource="bzl/mappering/Attachment.xml"/>
+    <mapper resource="bzl/mappering/BootSetting.xml"/>
+    <mapper resource="bzl/mappering/LampSetting.xml"/>
+     <mapper resource="bzl/mappering/Camera.xml"/>
+    <mapper resource="bzl/mappering/ExamInfo.xml"/>
+    <mapper resource="bzl/mappering/ExamTask.xml"/>
+    <mapper resource="bzl/mappering/ExamInfoTpl.xml"/>
+    <mapper resource="bzl/mappering/ExamTaskTpl.xml"/>
+    <mapper resource="bzl/mappering/UrgencyTask.xml"/>
+    <mapper resource="bzl/mappering/Function.xml"/>
+    <mapper resource="bzl/mappering/HelpInfo.xml"/>
+    <mapper resource="bzl/mappering/JDBCUtil.xml"/>
+    <mapper resource="bzl/mappering/LoginLog.xml"/>
+    <mapper resource="bzl/mappering/ShieldTask.xml"/>
+    <mapper resource="bzl/mappering/TaskInfo.xml"/>
+    <mapper resource="bzl/mappering/Terminal.xml"/>
+     <mapper resource="bzl/mappering/TerminalLog.xml"/>
+    <mapper resource="bzl/mappering/TerminalGroup.xml"/>
+    <mapper resource="bzl/mappering/TerminalUpdate.xml"/>
+    <mapper resource="bzl/mappering/User.xml"/>
+    <mapper resource="bzl/mappering/UserLog.xml"/>
+    <mapper resource="bzl/mappering/UserGroup.xml"/>
+    <mapper resource="bzl/mappering/LivePlay.xml"/>
+    <mapper resource="bzl/mappering/ExtendServer.xml"/>
+    <mapper resource="bzl/mappering/ServerUpdate.xml"/>
+
+  </mappers>
+</configuration>

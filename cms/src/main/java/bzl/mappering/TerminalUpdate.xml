@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  -->
+<mapper namespace="TerminalUpdate">
+<resultMap id="TerminalUpdateResult" type="java.util.HashMap">
+	<result column="id" property="id" jdbcType="INTEGER"/>
+	<result column="apk_name" property="apk_name" jdbcType="VARCHAR"/>
+	<result column="op_user" property="op_user" jdbcType="VARCHAR"/>
+	<result column="new_version" property="new_version" jdbcType="VARCHAR"/>
+	<result column="total_terminal_cnt" property="total_terminal_cnt" jdbcType="INTEGER"/>
+	<result column="ok_terminal_cnt" property="ok_terminal_cnt" jdbcType="INTEGER"/>
+	<result column="fail_terminal_cnt" property="fail_terminal_cnt" jdbcType="INTEGER"/>
+	<result column="create_time" property="create_time" jdbcType="DATE"/>
+	<result column="end_time" property="end_time" jdbcType="DATE"/>
+</resultMap>
+<resultMap id="TerminalUpdateResultEntity" type="bzl.entity.TerminalUpdate">
+	<result column="id" property="id" jdbcType="INTEGER"/>
+	<result column="apk_name" property="apk_name" jdbcType="VARCHAR"/>
+	<result column="op_user" property="op_user" jdbcType="VARCHAR"/>
+	<result column="new_version" property="new_version" jdbcType="VARCHAR"/>
+	<result column="total_terminal_cnt" property="total_terminal_cnt" jdbcType="INTEGER"/>
+	<result column="ok_terminal_cnt" property="ok_terminal_cnt" jdbcType="INTEGER"/>
+	<result column="fail_terminal_cnt" property="fail_terminal_cnt" jdbcType="INTEGER"/>
+	<result column="create_time" property="create_time" jdbcType="DATE"/>
+	<result column="end_time" property="end_time" jdbcType="DATE"/>
+</resultMap>
+<parameterMap id="TerminalUpdateParam" type="java.util.HashMap">
+</parameterMap>
+<parameterMap id="TerminalUpdateEntity" type="bzl.entity.TerminalUpdate">
+</parameterMap>
+<sql id="mysql">
+	id,apk_name,op_user,new_version,total_terminal_cnt,ok_terminal_cnt,fail_terminal_cnt,date_format(create_time,'%Y-%c-%d %H:%i:%s') AS create_time,date_format(end_time,'%Y-%c-%d %H:%i:%s') AS end_time  
+</sql>
+<select id="selectByPK" parameterMap="TerminalUpdateParam"
+resultMap="TerminalUpdateResult">
+  	 	select <include refid="mysql"/> from t_terminal_update where  id = #{id}
+</select>
+<select id="selectAll" resultMap="TerminalUpdateResult">
+  	select <include refid="mysql"/> from t_terminal_update
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+</select>
+<!-- 动态查询 -->
+<select id="selectByCondition" parameterMap="TerminalUpdateParam" resultMap="TerminalUpdateResult">
+	select <include refid="mysql"/> from t_terminal_update
+		<include refid="sqlwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+</select>
+<!-- 动态sql -->
+<select id="selectCountByCondition" parameterMap="TerminalUpdateParam" resultType="java.util.HashMap">
+	select count(1) count from t_terminal_update
+	<include refid="sqlwhere"/>
+</select>
+<!-- 动态获得本页统计 -->
+<select id="selectPageCountByCondition" parameterMap="TerminalUpdateParam" resultType="java.util.HashMap">
+	select count(1) count from t_terminal_update
+	<include refid="sqlwhere"/>
+	limit ${startrom},${pagesize}
+	</select>
+<!-- 动态分页sql -->
+<select id="selectByConditionWithPage" parameterMap="TerminalUpdateParam" resultMap="TerminalUpdateResult">
+	select <include refid="mysql"/> from t_terminal_update
+	<include refid="sqlwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+		</if>
+	<if test="order != null">
+			${order}
+	</if>
+	limit ${startrom},${pagesize}
+</select>
+<!-- 动态统计已删除记录-->
+<select id="selectDelCountByCondition" parameterMap="TerminalUpdateParam" resultType="java.util.HashMap">
+	select count(1) count from t_terminal_update
+	<include refid="sqlwhere"/>
+</select>
+<!-- 动态查询已删除记录分页-->
+<select id="selectDelByConditionWithPage" parameterMap="TerminalUpdateParam" resultMap="TerminalUpdateResult">
+	select <include refid="mysql"/> from t_terminal_update
+	<include refid="sqlwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+	limit ${startrom},${pagesize}
+</select>
+<insert id="insert" parameterMap="TerminalUpdateParam" useGeneratedKeys="true">
+<![CDATA[
+      insert into t_terminal_update(apk_name,op_user,new_version,total_terminal_cnt,ok_terminal_cnt,fail_terminal_cnt,create_time,end_time) values(#{apk_name},#{op_user},#{new_version},#{total_terminal_cnt},#{ok_terminal_cnt},#{fail_terminal_cnt},#{create_time},#{end_time})
+    ]]>
+</insert>
+<sql id="sqlwhere">
+	<where>
+	    <if test="apk_name != null">
+			 and apk_name = #{apk_name}
+		</if>
+		<if test="op_user != null">
+			 and op_user = #{op_user}
+		</if>
+		<if test="new_version != null">
+			 and new_version = #{new_version}
+		</if>
+		<if test="create_time != null">
+			 and create_time = #{create_time}
+		</if>
+		<if test="end_time != null">
+			 and end_time = #{end_time}
+		</if>
+	</where>
+</sql>
+
+</mapper>

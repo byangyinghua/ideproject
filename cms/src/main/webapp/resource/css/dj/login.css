@@ -1,0 +1,183 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
+html,
+body {
+	font-family:"Microsoft YaHei",微软雅黑,Verdana, Arial, Helvetica, sans-serif;
+	height: 100%;
+	overflow: hidden;
+}
+
+.loginBody {
+	background-color: #830706;
+}
+
+.login1 {
+	height: 100%;
+	width: 100%;
+	background: url(../../images/dj/login_background.png);
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	background-attachment: fixed;
+
+}
+
+.login2 {
+	width: 764px;
+	height: 694px;
+	/*background-color: green;*/
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	margin-left: -382px;
+	margin-top: -347px;
+}
+/*logo*/
+.login21 {
+	width: 100%;
+	height: 119px;
+	background: url(../../images/dj/login_logo.png) center;
+	background-repeat: no-repeat;
+}
+/*表单*/
+.login22 {
+	width: 100%;
+	height: 474px;
+	background: url(../../images/dj/login_loginback.png);
+	background-repeat: no-repeat;
+	position: relative;
+}
+/*版权*/
+.login23 {
+	width: 100%;
+	height: auto;
+	text-align: center;
+}
+
+
+/*登录框-用户名*/
+
+.login22 .loginName {
+	width: 359px;
+	height: 35px;
+	font-size: 20px;
+	line-height: 35px;
+	background: url(../../images/dj/login_input.png) 70px no-repeat;
+	position: absolute;
+	left: 184px;
+	top: 131px;
+}
+
+.login22 .loginName input {
+	width: 250px;
+	height: 35px;
+	line-height: 35px;
+	border: none;
+	background-color: transparent;
+}
+
+
+/*登录框-密码*/
+
+.login22 .loginPass {
+	width: 359px;
+	height: 35px;
+	font-size: 20px;
+	line-height: 35px;
+	background: url(../../images/dj/login_input.png) 70px no-repeat;
+	position: absolute;
+	left: 184px;
+	top: 220px;
+}
+
+.login22 .loginPass input {
+	width: 250px;
+	height: 35px;
+	line-height: 35px;
+	border: none;
+	background-color: transparent;
+	font-size: 20px;
+}
+
+
+/*登录框-验证码*/
+
+.login22 .loginCheck {
+	width: 359px;
+	height: 35px;
+	font-size: 20px;
+	line-height: 35px;
+	background: url(../../images/dj/login_checkcode.png) 70px no-repeat;
+	position: absolute;
+	left: 184px;
+	top: 230px;
+}
+/*登录框-验证码输入框*/
+.login22 .loginCheck input {
+	width: 110px;
+	height: 35px;
+	line-height: 35px;
+	border: none;
+	background-color: transparent;
+}
+/*登录框-验证码本身*/
+.login22 .loginCheck .validateCode-codeBackground {
+	width: 59px;
+	height: 20px;
+	cursor: pointer;
+	position: absolute;
+	left: 210px;
+	top: 8px;
+}
+/*登录框—刷新验证码*/
+.login22 .loginCheck .validateCode-tipMsg {
+	width: 60px;
+	height: 35px;
+	cursor: pointer;
+	position: absolute;
+	left: 285px;
+	top: 0px;
+}
+
+
+/*登录框-submit*/
+
+.login22 .loginSubmit {
+	width: 294px;
+	height: 56px;
+	text-align: center;
+	position: absolute;
+	left: 248px;
+	top: 300px;
+}
+
+.login22 .loginSubmit button {
+	text-align: center;
+	width: 296px;
+	height: 56px;
+	background: url(../../images/dj/login_button.png) no-repeat;
+	border: none;
+	font-weight: bold;
+	font-size: 20px;
+	line-height: 56px;
+	color: white;
+	cursor: pointer;
+}
+
+
+/*用户名输入提示*/
+
+.loginInput {
+	color: dimgray;
+	font-size: 20px;
+}
+
+
+/*用户名密码输入框样式*/
+
+.loginInput_on {
+	color: black;
+	font-size: 20px;
+}

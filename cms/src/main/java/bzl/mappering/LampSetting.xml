@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  -->
+<mapper namespace="LampSetting">
+<resultMap id="LampSettingResult" type="java.util.HashMap">
+	<result column="id" property="id" jdbcType="INTEGER"/>
+	<result column="setting_id" property="setting_id" jdbcType="VARCHAR"/>
+	<result column="on_time" property="on_time" jdbcType="DATE"/>
+	<result column="off_time" property="off_time" jdbcType="DATE"/>
+	<result column="week_days" property="week_days" jdbcType="VARCHAR"/>
+	<result column="creator" property="creator" jdbcType="VARCHAR"/>
+	<result column="creator_uid" property="creator_uid" jdbcType="VARCHAR"/>
+	<result column="update_time" property="update_time" jdbcType="TIMESTAMP"/>
+
+</resultMap>
+<resultMap id="LampSettingResultEntity" type="bzl.entity.LampSetting">
+	<result column="id" property="id" jdbcType="INTEGER"/>
+	<result column="setting_id" property="setting_id" jdbcType="VARCHAR"/>
+	<result column="on_time" property="on_time" jdbcType="DATE"/>
+	<result column="off_time" property="off_time" jdbcType="DATE"/>
+	<result column="week_days" property="week_days" jdbcType="VARCHAR"/>
+	<result column="creator" property="creator" jdbcType="VARCHAR"/>
+	<result column="creator_uid" property="creator_uid" jdbcType="VARCHAR"/>
+	<result column="update_time" property="update_time" jdbcType="TIMESTAMP"/>
+</resultMap>
+<parameterMap id="LampSettingParam" type="java.util.HashMap">
+</parameterMap>
+<parameterMap id="LampSettingEntity" type="bzl.entity.LampSetting">
+</parameterMap>
+<sql id="mysql">
+	id,setting_id,on_time,off_time,week_days,creator,creator_uid,update_time
+</sql>
+<select id="selectByPK" parameterMap="LampSettingParam"
+resultMap="LampSettingResult">
+  	 	select <include refid="mysql"/> from t_lamp_setting where  setting_id = #{setting_id}
+</select>
+<select id="selectAll" resultMap="LampSettingResult">
+  	select <include refid="mysql"/> from t_lamp_setting 
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+</select>
+<!-- 动态查询 -->
+<select id="selectByCondition" parameterMap="LampSettingParam" resultMap="LampSettingResult">
+	select <include refid="mysql"/> from t_lamp_setting
+		<include refid="sqlwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+</select>
+<!-- 动态sql -->
+<select id="selectCountByCondition" parameterMap="LampSettingParam" resultType="java.util.HashMap">
+	select count(1) count from t_lamp_setting
+	<include refid="sqlwhere"/>
+</select>
+<!-- 动态获得本页统计 -->
+<select id="selectPageCountByCondition" parameterMap="LampSettingParam" resultType="java.util.HashMap">
+	select count(1) count from t_lamp_setting
+	<include refid="sqlwhere"/>
+	limit ${startrom},${pagesize}
+	</select>
+<!-- 动态分页sql -->
+<select id="selectByConditionWithPage" parameterMap="LampSettingParam" resultMap="LampSettingResult">
+	select <include refid="mysql"/> from t_lamp_setting
+	<include refid="sqlwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+		</if>
+	<if test="order != null">
+			${order}
+	</if>
+	limit ${startrom},${pagesize}
+</select>
+<insert id="insert" parameterMap="LampSettingParam" useGeneratedKeys="true">
+<![CDATA[
+      insert into t_lamp_setting(setting_id,on_time,off_time,week_days,creator,creator_uid,update_time) values(#{setting_id},#{on_time},#{off_time},#{week_days},#{creator},#{creator_uid},#{update_time})
+    ]]>
+</insert>
+<delete id="delete" parameterMap="LampSettingParam">
+  <![CDATA[
+    delete from t_lamp_setting where setting_id = #{setting_id}
+  ]]>
+</delete>
+<!-- 批量删除 -->
+<delete id="deleteBat" parameterMap="LampSettingParam">
+    delete from t_lamp_setting where
+     	setting_id in 
+		<foreach item="item" index="index" collection="setting_ids"  open="(" separator="," close=")">
+	      #{item}
+ 	 </foreach>
+ </delete>
+<!-- 动态更新 -->
+<update id="update"  parameterMap="LampSettingParam">
+	update t_lamp_setting 
+	<set>
+		<if test="on_time != null">
+			on_time = #{on_time},
+		</if>
+		<if test="off_time != null">
+			off_time = #{off_time},
+		</if>
+		<if test="week_days != null">
+			week_days = #{week_days},
+		</if>
+	</set>
+	where setting_id = #{setting_id}
+</update>
+<sql id="sqlwhere">
+	<where>
+	    <if test="setting_id != null">
+			 setting_id = #{setting_id}
+		</if>
+		<if test="on_time != null">
+			 on_time = #{on_time}
+		</if>
+		<if test="off_time != null">
+			 and off_time = #{off_time}
+		</if>
+		<if test="week_days != null">
+			 and week_days = #{week_days}
+		</if>
+		<if test="creator != null">
+			 and creator = #{creator}
+		</if>
+		<if test="creator_uid != null">
+				and creator_uid = #{creator_uid}
+		</if>
+		<if test="creator_uids != null">
+			 and creator_uid in
+			<foreach item="item" index="index" collection="creator_uids"  open="(" separator="," close=")">
+	            #{item}
+ 	        </foreach>
+		</if>
+		
+	</where>
+</sql>
+<!-- 验证唯一 -->
+<select id="judgeonly" parameterMap="LampSettingParam" resultType="java.util.HashMap">
+	select distinct if(exists(select id from t_lamp_setting
+	<where>
+		<if test="setting_id != null">
+			 setting_id = #{setting_id}
+		</if>
+	</where>
+	),1,0) as flag from t_lamp_setting
+</select>
+
+</mapper>

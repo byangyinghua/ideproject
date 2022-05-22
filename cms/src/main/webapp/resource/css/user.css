@@ -1,0 +1,29 @@
+@charset "utf-8";
+select{border: 1px solid #20A7D3;}
+select#s1,select#s2{width: 75px;}
+select#s3{width: 155px;}
+/*信息包围边框*/
+.fieldset{border: none;border: 1px solid #20A7D3;margin: 5px 0;}
+.fieldset > legend{color: #20A7D3;font-size: 16px;}
+.fieldlist{border: none;border: 1px solid #20A7D3;margin: 5px 0;height: 230px;}
+.fieldlist > legend{color: #20A7D3;font-size: 16px;}
+
+#ff{width: 860px;}
+.user-head{
+	width: 200px;
+	height: 590px;
+	float: left;
+	margin: 30px 20px 0 -45px;
+	text-align: center;
+}
+.user-head img{width: 150px;}
+.user-info{
+	width: 860px;
+}
+/* 
+table tr td:nth-child(odd){width:180px;text-align: right;} 
+table tr td:nth-child(even){width:180px;}  */
+/*按钮*/
+.easyui-linkbutton{width: 80px;color: #fff;}
+.save-btn{background: #169BD5;}
+.close-btn{background: #EA5434;margin-right:15px;}

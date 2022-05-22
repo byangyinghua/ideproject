@@ -1,0 +1,16 @@
+【编译环境】
+------------------------------------
+
+1- Linux32
+	Linux版本：CentOS release 5.9(Final)
+	gcc 版本：4.1.2 
+	Demo通过Qt开发，Qt版本：4.6.0，QMake版本：2.01a
+
+2- Linux64
+	Linux版本：CentOS release 6.6(Final)
+	gcc 版本：4.4.7
+	Demo通过Qt开发，Qt版本：4.6.2，QMake版本：2.01a
+
+
+
+

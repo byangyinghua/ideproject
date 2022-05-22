@@ -1,0 +1,255 @@
+@charset "utf-8";
+
+/*body{*/
+    /*font-size:1.5vmin;*/
+/*}*/
+
+.show-border{
+    border:1px solid red;
+}
+.bylogo{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-left:20px;
+    margin-right:20px;
+    margin-bottom:20px;
+}
+
+.footer{
+    display: block;
+    position: fixed;
+    margin-bottom: 0;
+    z-index: 999;
+
+}
+.icon-margin {
+    padding: 5px;
+}
+
+.pop-body{
+   margin:15px;
+}
+
+.copyright {
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+}
+
+.horizon{
+    display: flex;
+    flex-direction: row;
+}
+
+.verical-margin{
+    margin-top:15px;
+    margin-bottom:15px;
+}
+
+.horizon-margin{
+    margin-left:15px;
+    margin-right:15px;
+}
+
+.horizon-padding{
+    padding-right: 20px;
+    padding-left: 20px;
+}
+
+.show_yzm {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+}
+
+.group-select{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    margin-top:15px;
+    margin-right: 50px;
+}
+
+.opacity-0{
+    opacity:0;
+}
+
+.width-10{
+    width: 10%;
+}
+
+.width-20{
+    width: 20%;
+}
+
+.width-30{
+    width: 30%;
+}
+
+.width-50{
+    width: 50%;
+}
+
+.width-80{
+    width: 80%;
+}
+
+.width-80{
+    width: 90%;
+}
+
+.width-100{
+    width: 100%;
+}
+
+.text-left{
+    text-align: left;
+}
+
+.text-center{
+    text-align: center;
+}
+
+
+.layui-table-cell {
+    width:auto;
+    height: auto;/* layui-table 表格内容允许换行 */
+    overflow: visible !important;/* 防止下拉框的下拉列表被隐藏---必须设置--- */
+    text-overflow:inherit;
+    white-space:normal;
+    word-break: break-all;
+}
+
+/* 使得下拉框与单元格刚好合适 */
+/*td .layui-form-select{*/
+    /*position:absolute;*/
+    /*!*margin-top: -10px;*!*/
+    /*!*margin-left: -15px;*!*/
+    /*!*margin-right: -15px;*!*/
+/*}*/
+/*.layui-form-select{*/
+
+/*}*/
+
+
+
+.table-inner-select{
+    /*width: 100%;*/
+    /*height: 100%;*/
+    /*background-color: #f54545;*/
+    color: grey;
+    /* 去掉三角 */
+    /*appearance:none;*/
+    /*-moz-appearance:none; !* Firefox *!*/
+    /*-webkit-appearance:none; !* Safari 和 Chrome *!*/
+    /* 去掉边框 */
+    background-color:rgba(255,255,255,0);
+    border: 0;
+    display: block;
+    position: relative;
+}
+
+/*.layui-tree-txt{*/
+    /*display: inline-block;*/
+    /*vertical-align: middle;*/
+    /*color: red;*/
+/*}*/
+
+.color-red{
+    color:red;
+}
+.color-btn{
+    color:#009688;
+}
+.color-check{
+    color:#5FB878
+}
+
+
+.top-border{
+    border-top: 1px solid lightgrey;
+}
+.bottom-border{
+    border-bottom: 1px solid lightgrey;
+}
+
+input[type = "radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    outline: none;
+    margin: 0;
+    vertical-align: text-bottom;
+    margin-right: 0.1rem;
+}
+
+
+.layui-form-label{
+    width: auto;
+    text-align: right;
+    padding-left: 25px;
+    padding-right: 0;
+}
+
+
+.colum-center{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+.align-top{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.align-left{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.align-right{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+.align-center{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.align-space{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.content_textarea{
+    width: 100%;
+    height: 90%;
+}
+
+.noticeText{
+    display: flex;
+    flex-direction: column;
+    width:25%;
+    height: 100%;
+}
+
+.imagePreview{
+    width: 300px;
+    height: 300px;
+    border: 1px solid green;
+}
+
+#imageTransfer{
+    overflow: hidden;
+}

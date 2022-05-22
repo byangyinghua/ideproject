@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  -->
+<mapper namespace="UserGroup">
+<resultMap id="UserGroupResult" type="java.util.HashMap">
+	<result column="id" property="id" jdbcType="INTEGER"/>
+	<result column="group_id" property="group_id" jdbcType="VARCHAR"/>
+	<result column="group_name" property="group_name" jdbcType="VARCHAR"/>
+	<result column="terminal_groups" property="terminal_groups" jdbcType="VARCHAR"/>
+	<result column="user_members" property="user_members" jdbcType="VARCHAR"/>
+	<result column="create_time" property="create_time" jdbcType="DATE"/>
+	<result column="update_time" property="update_time" jdbcType="DATE"/>
+</resultMap>
+<resultMap id="UserGroupResultEntity" type="bzl.entity.UserGroup">
+	<result column="id" property="id" jdbcType="INTEGER"/>
+	<result column="group_id" property="group_id" jdbcType="VARCHAR"/>
+	<result column="group_name" property="group_name" jdbcType="VARCHAR"/>
+	<result column="terminal_groups" property="terminal_groups" jdbcType="VARCHAR"/>
+	<result column="user_members" property="user_members" jdbcType="VARCHAR"/>
+	<result column="create_time" property="create_time" jdbcType="DATE"/>
+	<result column="update_time" property="update_time" jdbcType="DATE"/>
+</resultMap>
+<parameterMap id="UserGroupParam" type="java.util.HashMap">
+</parameterMap>
+<parameterMap id="UserGroupEntity" type="bzl.entity.UserGroup">
+</parameterMap>
+<sql id="mysql">
+	id,group_id,group_name,terminal_groups,user_members,create_time,update_time
+</sql>
+<select id="selectByPK" parameterMap="UserGroupParam"
+resultMap="UserGroupResult">
+  	 	select <include refid="mysql"/> from t_user_group where  group_id = #{group_id}
+</select>
+<select id="selectAll" resultMap="UserGroupResult">
+  	select <include refid="mysql"/> from t_user_group
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+</select>
+<!-- 动态查询 -->
+<select id="selectByCondition" parameterMap="UserGroupParam" resultMap="UserGroupResult">
+	select <include refid="mysql"/> from t_user_group
+		<include refid="sqlwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+</select>
+<!-- 动态sql -->
+<select id="selectCountByCondition" parameterMap="UserGroupParam" resultType="java.util.HashMap">
+	select count(1) count from t_user_group
+	<include refid="sqlwhere"/>
+</select>
+<!-- 动态获得本页统计 -->
+<select id="selectPageCountByCondition" parameterMap="UserGroupParam" resultType="java.util.HashMap">
+	select count(1) count from t_user_group
+	<include refid="sqlwhere"/>
+	limit ${startrom},${pagesize}
+	</select>
+<!-- 动态分页sql -->
+<select id="selectByConditionWithPage" parameterMap="UserGroupParam" resultMap="UserGroupResult">
+	select <include refid="mysql"/> from t_user_group
+	<include refid="sqlwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+		</if>
+	<if test="order != null">
+			${order}
+	</if>
+	limit ${startrom},${pagesize}
+</select>
+
+<insert id="insert" parameterMap="UserGroupParam" useGeneratedKeys="true">
+<![CDATA[
+      insert into t_user_group(group_id,group_name,terminal_groups,user_members,create_time,update_time) values(#{group_id},#{group_name},#{terminal_groups},#{user_members},#{create_time},#{update_time})
+    ]]>
+</insert>
+
+<delete id="delete" parameterMap="UserGroupParam">
+  <![CDATA[
+    delete from t_user_group where group_id = #{group_id}
+  ]]>
+</delete>
+
+<!-- 动态更新 -->
+<update id="update"  parameterMap="UserGroupParam">
+	update t_user_group 
+	<set>
+		<if test="group_name != null">
+			group_name = #{group_name},
+		</if>
+		<if test="terminal_groups != null">
+			terminal_groups = #{terminal_groups},
+		</if>
+		<if test="user_members != null">
+			user_members = #{user_members},
+		</if>
+		<if test="update_time != null">
+			update_time = #{update_time}
+		</if>
+	</set>
+	where group_id = #{group_id}
+</update>
+
+<sql id="sqlwhere">
+	<where>
+        <if test="id != null">
+			id = #{id}
+		</if>
+		<if test="group_id != null">
+			 and group_id = #{group_id}
+		</if>
+		<if test="terminal_group_id != null">
+			 and  terminal_groups LIKE CONCAT('%',#{terminal_group_id,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="uid != null">
+			 and  user_members LIKE CONCAT('%',#{uid,jdbcType=VARCHAR},'%')
+		</if>
+	</where>
+</sql>
+
+</mapper>

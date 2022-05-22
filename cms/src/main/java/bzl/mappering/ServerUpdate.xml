@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- -->
+<mapper namespace="ServerUpdate">
+	<resultMap id="ServerUpdateResult" type="java.util.HashMap">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="filename" property="filename"
+			jdbcType="VARCHAR" />
+		<result column="description" property="description"
+			jdbcType="VARCHAR" />
+		<result column="war_md5" property="war_md5"
+			jdbcType="VARCHAR" />
+		<result column="version" property="version"
+			jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+		<result column="create_time" property="create_time"
+			jdbcType="DATE" />
+		<result column="update_time" property="update_time"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="ServerUpdateResultEntity" type="bzl.entity.ServerUpdate">
+		<result column="id" property="id" jdbcType="INTEGER" />
+		<result column="filename" property="filename"
+			jdbcType="VARCHAR" />
+		<result column="description" property="description"
+			jdbcType="VARCHAR" />
+		<result column="war_md5" property="war_md5"
+			jdbcType="VARCHAR" />
+		<result column="version" property="version"
+			jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="TINYINT" />
+		<result column="create_time" property="create_time"
+			jdbcType="DATE" />
+		<result column="update_time" property="update_time"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+	<parameterMap id="ServerUpdateParam" type="java.util.HashMap">
+	</parameterMap>
+	<parameterMap id="ServerUpdateEntity" type="bzl.entity.ServerUpdate">
+	</parameterMap>
+	<sql id="mysql">
+		id,filename,description,war_md5,version,status,date_format(create_time,'%Y-%c-%d %H:%i:%s') AS create_time,date_format(update_time,'%Y-%c-%d %H:%i:%s') AS update_time
+	</sql>
+	<select id="selectByPK" parameterMap="ServerUpdateParam"
+		resultMap="ServerUpdateResult">
+		select
+		<include refid="mysql" />
+		from t_server_update where id = #{id}
+	</select>
+	<select id="selectAll" resultMap="ServerUpdateResult">
+		select
+		<include refid="mysql" />
+		from t_server_update
+		<if test="sort != null">
+			order by ${sort}
+		</if>
+		<if test="order != null">
+			${order}
+		</if>
+	</select>
+	<!-- 动态查询 -->
+	<select id="selectByCondition" parameterMap="ServerUpdateParam"
+		resultMap="ServerUpdateResult">
+		select
+		<include refid="mysql" />
+		from t_server_update
+		<include refid="sqlwhere" />
+		<if test="sort != null">
+			order by ${sort}
+		</if>
+		<if test="order != null">
+			${order}
+		</if>
+	</select>
+	<!-- 动态sql -->
+	<select id="selectCountByCondition" parameterMap="ServerUpdateParam"
+		resultType="java.util.HashMap">
+		select count(1) count from t_server_update
+		<include refid="sqlwhere" />
+	</select>
+	<!-- 动态获得本页统计 -->
+	<select id="selectPageCountByCondition"
+		parameterMap="ServerUpdateParam" resultType="java.util.HashMap">
+		select count(1) count from t_server_update
+		<include refid="sqlwhere" />
+		limit ${startrom},${pagesize}
+	</select>
+	<!-- 动态分页sql -->
+	<select id="selectByConditionWithPage"
+		parameterMap="ServerUpdateParam" resultMap="ServerUpdateResult">
+		select
+		<include refid="mysql" />
+		from t_server_update
+		<include refid="sqlwhere" />
+		<if test="sort != null">
+			order by ${sort}
+		</if>
+		<if test="order != null">
+			${order}
+		</if>
+		limit ${startrom},${pagesize}
+	</select>
+
+	<insert id="insert" parameterMap="ServerUpdateParam"
+		useGeneratedKeys="true">
+<![CDATA[
+      insert into t_server_update(filename,description,war_md5,version,status,create_time) values(#{filename},#{description},#{war_md5},#{version},#{status},#{create_time})
+    ]]>
+	</insert>
+	<sql id="sqlwhere">
+		<where>
+			<if test="filename != null">
+				filename = #{filename}
+			</if>
+			<if test="war_md5 != null">
+				and war_md5 = #{war_md5}
+			</if>
+		</where>
+	</sql>
+	<!-- 验证唯一 -->
+	<select id="judgeonly" parameterMap="ServerUpdateParam"
+		resultType="java.util.HashMap">
+		select distinct if(exists(select id from t_server_update
+		<where>
+			<if test="ServerUpdate_id != null">
+				info_id = #{info_id}
+			</if>
+		</where>
+
+		),1,0) as flag from t_server_update
+	</select>
+
+</mapper>

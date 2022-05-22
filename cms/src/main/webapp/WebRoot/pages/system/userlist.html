@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>用户管理-博爻科技公司数字化多媒体系统</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../static/css/font.css">
+    <link rel="stylesheet" href="../../static/css/weadmin.css">
+    <link rel="stylesheet" href="../../static/css/common.css">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+
+
+    <![endif]-->
+</head>
+
+<body>
+
+<script type="text/html" id="toolbarAction">
+    <div class="align-space">
+        <div>
+            <a class="layui-col-xs layui-col-sm layui-col-md layui-btn layui-btn-sm layui-btn-danger" lay-event="delSelect">批量删除</a>
+            <a class="layui-col-xs layui-col-sm layui-col-md layui-btn layui-btn-sm" lay-event="addNewUser">新增用户</a>
+            <a style="margin-left:30px;">用户名不可以重复，删除后也不可以重新添加相同的！</a>
+        </div>
+        <div>所有用户列表</div>
+    </div>
+
+</script>
+
+
+<script type="text/html" id="currentUserToolbar">
+    <div>当前用户信息,点击单元格可修改各项</div>
+</script>
+
+<script type="text/html" id="userGroupToolbar">
+    <a class="layui-col-xs layui-col-sm layui-col-md layui-btn layui-btn-sm layui-btn-danger" lay-event="batchDelUserGroup">批量删除</a>
+    <a class="layui-col-xs layui-col-sm layui-col-md layui-btn layui-btn-sm" lay-event="addNewGroup">新增用户分组</a>
+</script>
+
+<script type="text/html" id="userGroupToolbar2">
+    <div>加入的用户分组</div>
+</script>
+
+
+<div id="addUserGroup" style="display: none;margin-top:15px;">
+    <form class="layui-form pop-body">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">分组名称：</label>
+                <div class="layui-input-block width-100">
+                    <input name="group_name" class="layui-input" type="text" autocomplete="off" lay-verify="required">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-filter="submitNewUserGroup" lay-submit="">确定创建</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<div id="modifyUserMembers" class="width-100" style="display:none;margin-bottom: 20px;">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend></legend>
+    </fieldset>
+    <div id="membersTransfer" class="horizon-margin"></div>
+    <div class="align-center verical-margin">
+        <div id="submitMembers" class="layui-btn align-center">确定保存</div>
+    </div>
+
+</div>
+
+<div id="modifyTerminalGroups" class="width-100" style="display:none;margin-bottom: 20px;">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend></legend>
+    </fieldset>
+    <div id="terminalGrpTransfer" class="horizon-margin"></div>
+    <div class="align-center verical-margin">
+        <div id="submitTerminalGroups" class="layui-btn align-center">确定保存</div>
+    </div>
+</div>
+
+
+<div id="addUser" style="display: none;margin-top:15px;">
+    <form class="layui-form pop-body">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">新用户名：</label>
+                <div class="layui-input-block">
+                    <input name="username" class="layui-input" type="text" autocomplete="off" lay-verify="required|username">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">设置密码：</label>
+                <div class="layui-input-block">
+                    <input name="password" class="layui-input" type="password" autocomplete="off" lay-verify="required|userpwd">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">确认密码：</label>
+                <div class="layui-input-block">
+                    <input name="confirm_pwd" class="layui-input" type="password" autocomplete="off" lay-verify="required|userpwd">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-filter="submitNewUser" lay-submit="">创建用户</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+<div id="modifyPwd" style="display: none;margin-top:15px;">
+    <form class="layui-form pop-body">
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">旧密码：</label>
+                <div class="layui-input-block">
+                    <input name="oldpwd" class="layui-input" type="password" autocomplete="off" lay-verify="required">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">设置密码：</label>
+                <div class="layui-input-block">
+                    <input name="newpwd" class="layui-input" type="password" autocomplete="off" lay-verify="required|userpwd">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">确认密码：</label>
+                <div class="layui-input-block">
+                    <input name="confirm_newpwd" class="layui-input" type="password" autocomplete="off" lay-verify="required|userpwd">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-filter="submitNewpwd" lay-submit="">确定修改</button>
+            </div>
+        </div>
+
+    </form>
+
+</div>
+
+
+
+<div class="weadmin-nav">
+			<span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">系统设置</a>
+        <a>
+          <cite>用户管理</cite></a>
+      </span>
+</div>
+
+<div class="weadmin-body">
+    <div style="margin-bottom:50px;">
+        <table id="currentUser" class="layui-table" lay-filter="currentUser"></table>
+    </div>
+
+    <div id="showUserGroup">
+        <table id="userGroupList" class="layui-table" lay-filter="userGroupList"></table>
+        <div id="group-pages">
+    </div>
+
+    <div id="allUserList" style="margin-top:10px;display:none;">
+        <table id="userList" class="layui-table" lay-filter="userList"></table>
+        <div id="pages">
+    </div>
+
+
+    </div>
+</div>
+
+
+<script src="../../lib/layui/layui.js" charset="utf-8"></script>
+<script src="./userlist.js" charset="utf-8"></script>
+</body>
+
+</html>

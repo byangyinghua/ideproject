@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>终端列表-博爻科技公司数字化多媒体系统</title>
+
+    <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+    <META HTTP-EQUIV="Expires" CONTENT="0">
+
+    <meta name="renderer" content="webkit"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <link rel="stylesheet" href="../../static/css/font.css"/>
+    <link rel="stylesheet" href="../../static/css/weadmin.css"/>
+
+    <link rel="stylesheet" href="../../plugins/font-awesome-4.7.0/css/font-awesome.css">
+    <link rel="stylesheet" href="../../static/css/common.css">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <style type="text/css">
+        input[type="checkbox"] {
+            width: 15px;
+            height: 15px;
+            display: inline-block;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 14px;
+            position: relative;
+            margin:5px;
+        }
+
+        input[type="checkbox"]::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: #fff;
+            width: 100%;
+            height: 100%;
+            border: 1px solid gray;
+        }
+
+        input[type="checkbox"]:checked::before {
+            content: '\2713';
+            background-color: #5FB878;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            border: 1px solid #fff;
+            color: #fff;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<script type="text/html" id="cellAction">
+
+    <a class="layui-btn  layui-btn-xs" lay-event="view-video">实时监控</a>
+    <a class="layui-btn  layui-btn-xs" lay-event="bind-camera">外接监控摄像头</a>
+    <a class="layui-btn  layui-btn-xs" lay-event="rebootNow">立即重启</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+
+
+<script type="text/html" id="toolbarAction">
+
+    <div class="layui-fluid align-space">
+        <div>
+            <div class="layui-col-xs layui-col-sm layui-col-md layui-btn layui-btn-sm layui-btn-danger"
+                 lay-event="delSelectTerminal">
+                <i class="fa fa-trash icon-margin"></i>批量删除
+            </div>
+            <div class="layui-col-xs layui-col-sm layui-col-md layui-btn layui-btn-sm" lay-event="move2Group">
+                <i class="fa fa-share icon-margin"></i>移动到
+            </div>
+            <div class="layui-col-xs layui-col-sm layui-col-md layui-btn layui-btn-sm" lay-event="copy2Group">
+                <i class="fa fa-files-o icon-margin"></i>复制到
+            </div>
+            <div class="layui-col-xs layui-col-sm layui-col-md layui-btn layui-btn-sm" lay-event="incrVolume">
+                <i class="fa fa-plus icon-margin"></i>增加音量
+            </div>
+            <div class="layui-col-xs layui-col-sm layui-col-md layui-btn layui-btn-sm" lay-event="decVolume">
+                <i class="fa fa-minus icon-margin"></i>减少音量
+            </div>
+            <div class="layui-col-xs layui-col-sm layui-col-md layui-btn layui-btn-sm" lay-event="rebootNow">
+                立即重启终端
+            </div>
+            <div class="layui-col-xs layui-col-sm layui-col-md layui-btn layui-btn-sm"
+                 lay-event="cleanTerminalTask">
+                查看终端所有任务
+            </div>
+
+        </div>
+
+        <div class="layui-col-xs layui-col-sm layui-col-md horizon-margin align-center"
+             style="position: relative;width:25%;margin:5px;">
+            <input id="searchInput" class="layui-input" style="height: 30px;" name="search" placeholder="请输入关键词" onkeyup="searchChange(this.value)">
+            <a lay-event="doSearch" style="position: absolute;right:5px;top:0;bottom:0;">
+                <i class="layui-icon layui-icon-search" style="background:#fff;padding:5px;"></i></a>
+        </div>
+
+    </div>
+</script>
+
+
+<div class="weadmin-nav">
+			<span class="layui-breadcrumb">
+				<a href="javascript:;">首页</a> <a href="javascript:;">终端管理</a>
+				<a href="javascript:;"> <cite>终端列表</cite></a>
+			</span>
+</div>
+
+<form id="groupform" class="layui-form" action="">
+    <div class="layui-form-item group-select align-left">
+        <label class="layui-form-label horizon-margin">请选择终端分组:</label>
+        <div class="width-30">
+            <select name="groulist" lay-verify="required" id="groupSelect" lay-filter="groupSelect">
+            </select>
+        </div>
+        <div id="refreshGroups"><i class="fa fa-refresh fa-lg horizon-margin color-btn" aria-hidden="true"></i></div>
+
+    </div>
+</form>
+
+<form id="changeGrp" class="layui-form" action="" style="display: none;margin-top:10px;margin-right: 20px;">
+    <div class="layui-form-item">
+        <label class="layui-form-label">请选择：</label>
+        <div class="layui-input-block">
+            <select name="gid" lay-verify="required" id="popGroupList" lay-filter="popGroupList">
+            </select>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="grpChangeSubmit">确定</button>
+        </div>
+    </div>
+</form>
+
+
+
+<div id="taskList" class="width-100" style="display:none;margin-bottom: 20px;">
+
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>请勾选</legend>
+    </fieldset>
+
+    <div id="taskListTree" class="demo-tree"></div>
+    <div  class="align-center verical-margin">
+        <div class="layui-btn layui-btn-danger" id="deleteTaskAction">确认删除勾选任务</div>
+        <div class="layui-btn layui-btn-danger" id="deleteAllTask">一键清空</div>
+    </div>
+
+</div>
+
+
+
+<div id="cameraSec-1" class="layui-form-item horizon-padding" style="margin-top: 10px;display: none;">
+    <label name="lable-sec" class="layui-form-label">摄像头1</label>
+    <label name="label-start" class="layui-form-label">NVR服务器IP地址：</label>
+    <div class="layui-input-inline" style="width:200px;">
+        <input name="cameraip-1" class="layui-input" style="width:200px;" type="text" autocomplete="off"
+               lay-verify="required|ip">
+    </div>
+
+    <label name="label-end" class="layui-form-label">编码通道：</label>
+    <div class="layui-input-inline" style="width:80px;">
+        <input name="channel-1" class="layui-input" style="width:100px;" type="text" autocomplete="off"
+               lay-verify="required">
+    </div>
+
+    <label name="label-name" class="layui-form-label">自定义命名：</label>
+    <div class="layui-input-inline" style="width:80px;">
+        <input name="cameraname-1" class="layui-input" style="width:100px;" type="text" autocomplete="off"
+               lay-verify="required">
+    </div>
+
+    <label name="delCameraBtn-1" class="layui-form-label color-red"></label>
+</div>
+
+
+<div id="bindCamera" style="display: none;">
+    <form class="layui-form " id="bindCameraForm">
+        <div id="addCameraBtn" class="layui-form-item horion-padding">
+            <div class="layui-input-inline">
+                <label class="layui-form-label color-btn">+新增摄像头</label>
+            </div>
+        </div>
+
+        <div class="layui-form-item horion-padding">
+            <div class="layui-input-block align-center">
+                <div class="layui-btn" id="submit-camera" lay-submit="submit-camera">确认绑定</div>
+            </div>
+        </div>
+
+    </form>
+
+</div>
+
+
+<div class="layui-fluid">
+    <table id="terminalList" class="layui-table" lay-filter="terminalList"></table>
+
+    <div class="align-space align-center">
+        <div id="pages"></div>
+        <!--<div class="align-left" style="font-size:60%;">-->
+            <!--<input id="isAutoRefresh" type="checkbox" name="isAutoRefresh">自动刷新列表-->
+        <!--</div>-->
+        <form class="layui-form">
+            <div class="layui-form-item">
+                <div class="layui-input-block">
+                    <input type="checkbox" id="isAutoRefresh" name="autoRefresh" lay-skin="primary" lay-filter="autoRefresh" title="自动刷新列表">
+                </div>
+            </div>
+        </form>
+
+        <div id="searchTerminal" class="layui-btn layui-btn-sm">搜索局域网终端</div>
+    </div>
+
+</div>
+<!--<script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>-->
+<script src="../../lib/layui/layui.js" charset="utf-8"></script>
+<script src="../../static/js/eleDel.js" type="text/javascript" charset="utf-8"></script>
+　　
+<script src="./terminals.js" type="text/javascript" charset="utf-8">
+
+
+</script>
+</body>
+</html>

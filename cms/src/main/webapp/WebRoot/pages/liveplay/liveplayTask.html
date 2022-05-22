@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>推流预案-博爻科技公司数字化多媒体系统</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../static/css/font.css">
+    <link rel="stylesheet" href="../../static/css/weadmin.css">
+    <link rel="stylesheet" href="../../static/css/common.css">
+    <link rel="stylesheet" href="../../plugins/font-awesome-4.7.0/css/font-awesome.css">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+        input[type="checkbox"] {
+            width: 15px;
+            height: 15px;
+            display: inline-block;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 14px;
+            position: relative;
+            margin:5px;
+        }
+
+        input[type="checkbox"]::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            background: #fff;
+            width: 100%;
+            height: 100%;
+            border: 1px solid gray;
+        }
+
+        input[type="checkbox"]:checked::before {
+            content: '\2713';
+            background-color: #5FB878;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            border: 1px solid #fff;
+            color: #fff;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<script type="text/html" id="toolbarPlaying">
+    <div class="align-left">
+        <a class="layui-col-xs layui-col-sm layui-col-md layui-btn layui-btn-sm" lay-event="refreshPlayingList">刷新</a>
+        <div class="horizon-margin">等待推流或者正在推流的预案(最多同时5个)</div>
+    </div>
+
+</script>
+
+
+<script type="text/html" id="toolbarAction">
+    <a class="layui-col-xs layui-col-sm layui-col-md layui-btn layui-btn-sm layui-btn-danger" lay-event="delSelect"><i class="fa fa-trash icon-margin"></i>删除</a>
+    <a class="layui-col-xs layui-col-sm layui-col-md layui-btn layui-btn-sm" lay-event="addNewLivePlay"><i class="fa fa-plus icon-margin"></i>新增</a>
+</script>
+
+<script type="text/html" id="playActions">
+    <div class="layui-btn  layui-btn-xs" lay-event="start">启动</div>
+    <div class="layui-btn  layui-btn-xs　layui-btn-danger" lay-event="stop">停止</div>
+</script>
+
+<div class="weadmin-nav">
+			<span class="layui-breadcrumb">
+		        <a href="">首页</a>
+		        <a href="">预案管理</a>
+		        <a><cite>推流预案</cite></a>
+		    </span>
+</div>
+
+
+<div id="setMediaFile" class="width-100" style="display:none;margin-bottom: 20px;">
+
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>请选择媒体文件(在左侧附件管理菜单可上传)</legend>
+    </fieldset>
+
+    <div id="mediaFileTree"></div>
+    <div id="confirmSelectFile" class="align-center verical-margin">
+        <div class="layui-btn">确定</div>
+    </div>
+
+</div>
+
+<div id="setTerminals" class="width-100" style="display:none;margin-bottom: 20px;">
+
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+        <legend>请选择分组或者终端</legend>
+    </fieldset>
+
+    <div id="terminalGrpTree" class="demo-tree"></div>
+    <div id="confirmTerminals" class="align-center verical-margin">
+        <div class="layui-btn">确定</div>
+    </div>
+
+</div>
+
+
+
+<div class="weadmin-body">
+    <table id="thePlayingList" class="layui-table" lay-filter="thePlayingList"></table>
+
+    <table id="liveplayList" class="layui-table" lay-filter="liveplayList"></table>
+    <div class="align-space align-center">
+        <div id="pages">
+        </div>
+    </div>
+
+</div>
+<script src="../../lib/layui/layui.js" charset="utf-8"></script>
+<script src="./liveplayTask.js" type="text/javascript" charset="utf-8"></script>
+</body>
+
+</html>

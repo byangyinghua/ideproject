@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="JDBCUtil">
+<!-- UUID -->
+<select id="UUID">UUID()</select>
+<!-- 流水号 -->
+<select id="SWIFT">FN_SWIFT(#{swft_type})</select>
+<!-- 当前时间戳 -->
+<select id="TIMESTAMP">CURRENT_TIMESTAMP</select>
+<!-- 当前日期 -->
+<select id="DATE">CURRENT_DATE</select>
+</mapper>

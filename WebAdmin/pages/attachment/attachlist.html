@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>附件管理-博爻科技公司数字化多媒体系统</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="../../static/css/font.css">
+    <link rel="stylesheet" href="../../static/css/weadmin.css">
+    <link rel="stylesheet" href="../../static/css/common.css">
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<script type="text/html" id="toolbarAction">
+    <div class="align-left">
+        <div class="layui-btn-container" id="selectFile">
+            <button id="batchDel" class="layui-btn layui-btn-sm layui-btn-danger" lay-event="batchDelFile"><i class="layui-icon"></i>批量删除</button>
+            <!--    <button id="addAttachment" class="layui-btn"><i class="layui-icon"></i>添加</button>-->
+            <label for="fileUpload">
+                <span id="text" class="layui-btn layui-btn-sm">上传文件</span>
+                <input type="file" id="fileUpload"　name="fileinfo" multiple="multiple" class="opacity-0" lay-ignore>
+            </label>
+        </div>
+        <label id="showSupport"></label>
+    </div>
+
+</script>
+
+
+<div class="weadmin-nav">
+			<span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">附件管理</a>
+        <a>
+          <cite>附件列表</cite></a>
+      </span>
+</div>
+
+<div id="imagePreview" style="display: none">
+    <div class="align-center pop-body">
+        <img id="thePreviewImg"  src="" width="300" height="300">
+    </div>
+</div>
+
+<div id="audioPreview" style="display: none">
+    <div class="align-center pop-body">
+        <audio id="thePreviewAudio" src="" controls="controls">
+            您的浏览器不支持 audio 标签。
+        </audio>
+    </div>
+</div>
+
+<div id="videoPreview" style="display: none">
+    <div class="align-center pop-body">
+        <video id="thePreviewVideo" src="" controls="controls">
+            您的浏览器不支持 video 标签。
+        </video>
+    </div>
+</div>
+
+<script type="text/html" id="itemAction">
+    <a class="layui-btn  layui-btn-xs layui-btn-danger" lay-event="delThisFile">删除</a>
+    <div class="layui-btn  layui-btn-xs"　lay-event="previewFile">预览</div>
+</script>
+
+<!--<form id="addAttachWin" class="layui-form" action="" style="display: none;margin-top:10px;margin-right: 20px;">-->
+<!--    <label for="fileinp">-->
+<!--        <span id="text" class="layui-btn">请上传文件</span>-->
+<!--        <input type="file" id="fileinp" 　name="fileinfo" accept="file" class="opacity-0">-->
+<!--    </label>-->
+
+<!--</form>-->
+
+
+<div class="weadmin-body">
+    <div class="width-100">
+        <div id="progressDiv" class="width-100 align-left" style="display: none;">
+            <label for="show-upload-progress" style="width:80px;">上传进度:</label>
+            <div id="show-upload-progress" class="layui-progress layui-progress-big width-100 align-left" lay-showPercent="yes" lay-filter="uploadProgress">
+                <div id="realProgress" class="layui-progress-bar layui-bg-green" lay-percent="0%"></div>
+            </div>
+        </div>
+    </div>
+    <table class="layui-table" lay-filter="attachmentTable" id="attachmentTable">
+    </table>
+    <div id="pages">
+    </div>
+</div>
+<script src="../../lib/layui/layui.js" charset="utf-8"></script>
+<script src="./attach.js" type="text/javascript" charset="utf-8"></script>
+</body>
+
+</html>

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- -->
+<mapper namespace="ExtendServer">
+	<resultMap id="ExtendServerResult" type="java.util.HashMap">
+		<result column="id" property="id" jdbcType="BIGINT" />
+			<result column="server_id" property="server_id"
+			jdbcType="VARCHAR" />
+		<result column="server_ip" property="server_ip"
+			jdbcType="VARCHAR" />
+		<result column="server_type" property="server_type"
+			jdbcType="VARCHAR" />
+		<result column="server_name" property="server_name" jdbcType="VARCHAR" />
+		<result column="login_name" property="login_name"
+			jdbcType="VARCHAR" />
+		<result column="login_pwd" property="login_pwd" jdbcType="VARCHAR" />
+		<result column="create_time" property="create_time"
+			jdbcType="DATE" />
+		<result column="update_time" property="create_time"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="ExtendServerResultEntity" type="bzl.entity.ExtendServer">
+			<result column="id" property="id" jdbcType="BIGINT" />
+				<result column="server_id" property="server_id"
+			jdbcType="VARCHAR" />
+		<result column="server_ip" property="server_ip"
+			jdbcType="VARCHAR" />
+		<result column="server_type" property="server_type"
+			jdbcType="VARCHAR" />
+		<result column="server_name" property="server_name" jdbcType="VARCHAR" />
+		<result column="login_name" property="login_name"
+			jdbcType="VARCHAR" />
+		<result column="login_pwd" property="login_pwd" jdbcType="VARCHAR" />
+		<result column="create_time" property="create_time"
+			jdbcType="DATE" />
+		<result column="update_time" property="create_time"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+	<parameterMap id="ExtendServerParam" type="java.util.HashMap">
+	</parameterMap>
+	<parameterMap id="ExtendServerEntity" type="bzl.entity.ExtendServer">
+	</parameterMap>
+	<sql id="mysql">
+		id,server_id,server_ip,server_type,server_name,login_name,login_pwd,create_time,update_time
+	</sql>
+	<select id="selectByPK" parameterMap="ExtendServerParam"
+		resultMap="ExtendServerResult">
+		select
+		<include refid="mysql" />
+		from t_extend_servers where server_id = #{server_id}
+	</select>
+	<select id="selectAll" resultMap="ExtendServerResult">
+		select
+		<include refid="mysql" />
+		from t_extend_servers
+		<if test="sort != null">
+			order by ${sort}
+		</if>
+		<if test="order != null">
+			${order}
+		</if>
+	</select>
+	<!-- 动态查询 -->
+	<select id="selectByCondition" parameterMap="ExtendServerParam"
+		resultMap="ExtendServerResult">
+		select
+		<include refid="mysql" />
+		from t_extend_servers
+		<include refid="sqlwhere" />
+		<if test="sort != null">
+			order by ${sort}
+		</if>
+		<if test="order != null">
+			${order}
+		</if>
+	</select>
+	<!-- 动态sql -->
+	<select id="selectCountByCondition" parameterMap="ExtendServerParam"
+		resultType="java.util.HashMap">
+		select count(1) count from t_extend_servers
+		<include refid="sqlwhere" />
+	</select>
+	<!-- 动态获得本页统计 -->
+	<select id="selectPageCountByCondition"
+		parameterMap="ExtendServerParam" resultType="java.util.HashMap">
+		select count(1) count from t_extend_servers
+		<include refid="sqlwhere" />
+		limit ${startrom},${pagesize}
+	</select>
+	<!-- 动态分页sql -->
+	<select id="selectByConditionWithPage"
+		parameterMap="ExtendServerParam" resultMap="ExtendServerResult">
+		select
+		<include refid="mysql" />
+		from t_extend_servers
+		<include refid="sqlwhere" />
+		<if test="sort != null">
+			order by ${sort}
+		</if>
+		<if test="order != null">
+			${order}
+		</if>
+		limit ${startrom},${pagesize}
+	</select>
+	<!-- 动态统计已删除记录 -->
+	<select id="selectDelCountByCondition"
+		parameterMap="ExtendServerParam" resultType="java.util.HashMap">
+		select count(1) count from t_extend_servers
+		<include refid="sqlwhere" />
+	</select>
+	<!-- 动态查询已删除记录分页 -->
+	<select id="selectDelByConditionWithPage"
+		parameterMap="ExtendServerParam" resultMap="ExtendServerResult">
+		select
+		<include refid="mysql" />
+		from t_extend_servers
+		<include refid="sqlwhere" />
+		<if test="sort != null">
+			order by ${sort}
+		</if>
+		<if test="order != null">
+			${order}
+		</if>
+		limit ${startrom},${pagesize}
+	</select>
+	<insert id="insert" parameterMap="ExtendServerParam"
+		useGeneratedKeys="true">
+<![CDATA[
+      insert into t_extend_servers(server_id,server_ip,server_type,server_name,login_name,login_pwd,create_time) values(#{server_id},#{server_ip},#{server_type},#{server_name},#{login_name},#{login_pwd},#{create_time})
+    ]]>
+	</insert>
+	<delete id="deleteByIP" parameterMap="ExtendServerParam">
+  <![CDATA[
+    delete from t_extend_servers where server_ip = #{server_ip}
+  ]]>
+	</delete>
+	<!-- 批量删除 -->
+	<delete id="deleteBat" parameterMap="ExtendServerParam">
+		delete from t_extend_servers where
+		server_ip in
+		<foreach item="item" index="index" collection="server_ips"
+			open="(" separator="," close=")">
+			#{item}
+		</foreach>
+	</delete>
+	<!-- 动态更新 -->
+	<update id="update" parameterMap="ExtendServerParam">
+		update t_extend_servers
+		<set>
+			<if test="server_type != null">
+				server_type = #{server_type},
+			</if>
+			<if test="server_name != null">
+				server_name = #{server_name},
+			</if>
+			<if test="login_name != null">
+				login_name = #{login_name},
+			</if>
+			<if test="login_pwd != null">
+				login_pwd = #{login_pwd},
+			</if>
+			<if test="create_time != null">
+				create_time = #{create_time},
+			</if>
+			<if test="server_ip != null">
+				server_ip = #{server_ip}
+			</if>
+		</set>
+		where server_id = #{server_id}
+	</update>
+	<sql id="sqlwhere">
+		<where>
+		     <if test="server_id != null">
+				and server_id = #{server_id}
+			</if>
+			  <if test="server_ip != null">
+				and server_ip = #{server_ip}
+			</if>
+			<if test="server_type != null">
+				and server_type = #{server_type}
+			</if>
+			<if test="server_name != null">
+				and server_name = #{server_name}
+			</if>
+			<if test="login_name != null">
+				and login_name = #{login_name}
+			</if>
+			<if test="login_pwd != null">
+				and login_pwd = #{login_pwd}
+			</if>
+
+		</where>
+	</sql>
+	<!-- 验证唯一 -->
+	<select id="judgeonly" parameterMap="ExtendServerParam"
+		resultType="java.util.HashMap">
+		select distinct if(exists(select id from t_extend_servers
+		<where>
+			<if test="server_ip != null">
+				server_ip = #{server_ip}
+			</if>
+		</where>
+
+		),1,0) as flag from t_extend_servers
+	</select>
+
+</mapper>

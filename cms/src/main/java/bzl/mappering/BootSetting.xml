@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  -->
+<mapper namespace="BootSetting">
+<resultMap id="BootSettingResult" type="java.util.HashMap">
+	<result column="id" property="id" jdbcType="INTEGER"/>
+	<result column="setting_id" property="setting_id" jdbcType="VARCHAR"/>
+	<result column="boot_time" property="boot_time" jdbcType="DATE"/>
+	<result column="shutdown_time" property="shutdown_time" jdbcType="DATE"/>
+	<result column="week_days" property="week_days" jdbcType="VARCHAR"/>
+	<result column="update_time" property="update_time" jdbcType="TIMESTAMP"/>
+	<result column="creator" property="creator" jdbcType="VARCHAR"/>
+	<result column="creator_uid" property="creator_uid" jdbcType="VARCHAR"/>
+
+</resultMap>
+<resultMap id="BootSettingResultEntity" type="bzl.entity.BootSetting">
+	<result column="id" property="id" jdbcType="INTEGER"/>
+	<result column="setting_id" property="setting_id" jdbcType="VARCHAR"/>
+	<result column="boot_time" property="boot_time" jdbcType="DATE"/>
+	<result column="shutdown_time" property="shutdown_time" jdbcType="DATE"/>
+	<result column="week_days" property="week_days" jdbcType="VARCHAR"/>
+	<result column="update_time" property="update_time" jdbcType="TIMESTAMP"/>
+	<result column="creator" property="creator" jdbcType="VARCHAR"/>
+    <result column="creator_uid" property="creator_uid" jdbcType="VARCHAR"/>
+</resultMap>
+<parameterMap id="BootSettingParam" type="java.util.HashMap">
+</parameterMap>
+<parameterMap id="BootSettingEntity" type="bzl.entity.BootSetting">
+</parameterMap>
+<sql id="mysql">
+	id,setting_id,boot_time,shutdown_time,week_days,creator,creator_uid,update_time
+</sql>
+<select id="selectByPK" parameterMap="BootSettingParam"
+resultMap="BootSettingResult">
+  	 	select <include refid="mysql"/> from t_boot_setting where  setting_id = #{setting_id}
+</select>
+<select id="selectAll" resultMap="BootSettingResult">
+  	select <include refid="mysql"/> from t_boot_setting 
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+</select>
+<!-- 动态查询 -->
+<select id="selectByCondition" parameterMap="BootSettingParam" resultMap="BootSettingResult">
+	select <include refid="mysql"/> from t_boot_setting
+		<include refid="sqlwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+</select>
+<!-- 动态sql -->
+<select id="selectCountByCondition" parameterMap="BootSettingParam" resultType="java.util.HashMap">
+	select count(1) count from t_boot_setting
+	<include refid="sqlwhere"/>
+</select>
+<!-- 动态获得本页统计 -->
+<select id="selectPageCountByCondition" parameterMap="BootSettingParam" resultType="java.util.HashMap">
+	select count(1) count from t_boot_setting
+	<include refid="sqlwhere"/>
+	limit ${startrom},${pagesize}
+	</select>
+<!-- 动态分页sql -->
+<select id="selectByConditionWithPage" parameterMap="BootSettingParam" resultMap="BootSettingResult">
+	select <include refid="mysql"/> from t_boot_setting
+	<include refid="sqlwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+		</if>
+	<if test="order != null">
+			${order}
+	</if>
+	limit ${startrom},${pagesize}
+</select>
+<insert id="insert" parameterMap="BootSettingParam" useGeneratedKeys="true">
+<![CDATA[
+      insert into t_boot_setting(setting_id,boot_time,shutdown_time,week_days,creator,creator_uid) values(#{setting_id},#{boot_time},#{shutdown_time},#{week_days},#{creator},#{creator_uid})
+    ]]>
+</insert>
+<delete id="delete" parameterMap="BootSettingParam">
+  <![CDATA[
+    delete from t_boot_setting where setting_id = #{setting_id}
+  ]]>
+</delete>
+<!-- 批量删除 -->
+<delete id="deleteBat" parameterMap="BootSettingParam">
+    delete from t_boot_setting where
+     	setting_id in 
+		<foreach item="item" index="index" collection="setting_ids"  open="(" separator="," close=")">
+	      #{item}
+ 	 </foreach>
+ </delete>
+<!-- 动态更新 -->
+<update id="update"  parameterMap="BootSettingParam">
+	update t_boot_setting 
+	<set>
+		<if test="boot_time != null">
+			boot_time = #{boot_time},
+		</if>
+		<if test="shutdown_time != null">
+			shutdown_time = #{shutdown_time},
+		</if>
+		<if test="week_days != null">
+			week_days = #{week_days},
+		</if>
+	</set>
+	where setting_id = #{setting_id}
+</update>
+<sql id="sqlwhere">
+	<where>
+	    <if test="setting_id != null">
+			 setting_id = #{setting_id}
+		</if>
+		<if test="boot_time != null">
+			 and boot_time = #{boot_time}
+		</if>
+		<if test="shutdown_time != null">
+			 and shutdown_time = #{shutdown_time}
+		</if>
+		<if test="week_days != null">
+			 and week_days = #{week_days}
+		</if>
+		<if test="creator_uids != null">
+			 and creator_uid in
+			<foreach item="item" index="index" collection="creator_uids"  open="(" separator="," close=")">
+	            #{item}
+ 	        </foreach>
+		</if>
+		
+	</where>
+</sql>
+<!-- 验证唯一 -->
+<select id="judgeonly" parameterMap="BootSettingParam" resultType="java.util.HashMap">
+	select distinct if(exists(select id from t_boot_setting
+	<where>
+		<if test="setting_id != null">
+			 setting_id = #{setting_id}
+		</if>
+	</where>
+	),1,0) as flag from t_boot_setting
+</select>
+
+</mapper>

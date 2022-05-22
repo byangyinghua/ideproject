@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>视频播放-博爻科技公司数字化多媒体系统</title>
+    <link rel="stylesheet" href="../../static/css/font.css"/>
+    <link rel="stylesheet" href="../../static/css/weadmin.css"/>
+    <link rel="stylesheet" href="../../static/css/common.css">
+
+    <link href="./video-js.css" rel="stylesheet">
+    <!--    <script src="http://vjs.zencdn.net/5.20.1/videojs-ie8.min.js"></script>-->
+
+</head>
+<body class="colum-center">
+
+<div class="colum-center" style="width:90%;height: 90%;" id="video-box">
+    <video id="realtime-video" class="video-js vjs-default-skin" autoplay  controls
+           poster="../../static/images/oceans.png">
+
+        <!--<source id="videsrc" src="" type="rtmp/flv">-->
+    </video>
+
+</div>
+
+
+<script src="../../lib/layui/layui.js" charset="utf-8"></script>
+<script src="./video.js"></script>
+<!--<script src="./flv.min.js"></script>-->
+<!--<script src="./videojs-flvjs.min.js"></script>-->
+<script>videojs.options.flash.swf ="./VideoJS.swf"; </script>
+<script>
+    // videojs.options.flash.swf = "video-js.swf";
+    layui.config({
+        base: '../../static/js/'
+    }).extend({ //设定模块别名
+        server_api: 'server_api'
+    });
+    layui.use(['jquery', 'server_api'], function () {
+        var $ = layui.jquery;
+        var server_api = layui.server_api;
+        var gWebSocket = window.parent.parent.getWebSocketConnect()
+        function GetQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg); //获取url中"?"符后的字符串并正则匹配
+            var context = "";
+            if (r != null)
+                context = r[2];
+            reg = null;
+            r = null;
+            return context == null || context == "" || context == "undefined" ? "" : context;
+        }
+
+        $(function () {
+            server_api.getUserInfo(null, function (resp) {
+                if (resp.status == 0) {
+
+                    var currentUser = resp.result[0]
+                    var w = $(window).innerWidth()*0.9;
+                    var h = $(window).innerHeight()*0.9;
+
+                    var videoSrc = GetQueryString("videoUrl");
+                    var videoType = GetQueryString("type");
+                    var stream_session = GetQueryString("stream_session");
+
+                    var videoDiv = $("#video-box")
+
+                    var videoRealShow = videoDiv.find("[id='realtime-video']")
+                    videoRealShow.attr("width",w)
+                    videoRealShow.css("width",w)
+
+
+                    var myPlayer = videojs('realtime-video', {
+                        sources: [{
+                            src: videoSrc,
+                            type: videoType
+                        }],
+                        height:h,
+                        width:w,
+                        fluid:true
+                    }, function () {
+                        this.on('play', function () {
+                            console.log('正在播放:',videoSrc);
+                            videoRealShow.css("width",w)
+                            // videoRealShow.css("height",h)
+
+                        });
+                        //暂停--播放完毕后也会暂停
+                        this.on('pause', function () {
+                            console.log("暂停中")
+                        });
+
+                        // 结束
+                        this.on('ended', function () {
+                            console.log('结束');
+                        })
+
+                    });
+
+                    myPlayer.src(videoSrc); //重新初始化视频地址
+                    if(stream_session!=null && stream_session.length >0){
+                        //server_api.getUserInfo()
+                        server_api.getLocalIP(null,function (resp) {
+                            if(resp.status==0){
+                                setInterval(function () {
+                                    var postData = {
+                                        cmd:0x01,
+                                        ip:resp.local_ip,
+                                        username:currentUser.username,
+                                        body:{
+                                            stream_ses_list:[stream_session]
+                                        }
+                                    }
+                                    gWebSocket.send(JSON.stringify(postData));
+                                },2000)
+                            }
+                        })
+
+                    }
+
+                }else{
+                    layer.msg("请重新登录!",{icon:2})
+                }
+            })
+        });
+    });
+</script>
+</body>
+</html>
+
+
+

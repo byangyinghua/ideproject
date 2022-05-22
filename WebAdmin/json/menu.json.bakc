@@ -1,0 +1,194 @@
+{
+  "status": 0,
+  "msg": "ok",
+  "data": [
+    {
+      "id": 1,
+      "name": "终端管理",
+      "icon": "&#59132;",
+      "url": "",
+      "children": [
+        {
+          "id": 2,
+          "name": "终端分组",
+          "icon": "",
+          "url": "./pages/terminals/groups.html"
+        },
+        {
+          "id": 3,
+          "name": "终端列表",
+          "icon": "",
+          "url": "./pages/terminals/terminals.html"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "任务管理",
+      "icon": "&#59132;",
+      "url": "",
+      "children": [
+        {
+          "id": 7,
+          "name": "定时任务",
+          "icon": "",
+          "url": "./pages/task/tasklist.html?plan_type=normal"
+        },
+        {
+          "id": 8,
+          "name": "临时任务",
+          "icon": "",
+          "url": "./pages/task/tasklist.html?plan_type=temporary"
+        },
+        {
+          "id": 9,
+          "name": "定时屏蔽",
+          "icon": "",
+          "url": "./pages/task/shieldtask.html"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "name": "终端求助",
+      "icon": "&#59132;",
+      "url": "",
+      "children": [
+        {
+          "id": 12,
+          "name": "求助列表",
+          "icon": "",
+          "url": "./pages/terminal_help/terHelp.html"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "name": "预案管理",
+      "icon": "&#59132;",
+      "url": "",
+      "children": [
+        {
+          "id": 15,
+          "name": "考试预案",
+          "icon": "",
+          "url": "./pages/task/tasklist.html?plan_type=exam"
+        },
+        {
+          "id": 16,
+          "name": "紧急预案",
+          "icon": "",
+          "url": "./pages/task/urgencyTask.html"
+        },
+        {
+          "id": 17,
+          "name": "推流预案",
+          "icon": "",
+          "url": "./pages/liveplay/liveplayTask.html"
+        },
+        {
+          "id": 18,
+          "name": "开关机设置",
+          "icon": "",
+          "url": "./pages/bootsetting/settinglist.html"
+        },
+        {
+          "id": 19,
+          "name": "开关灯设置",
+          "icon": "",
+          "url": "./pages/lampsetting/settinglist.html"
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "name": "附件管理",
+      "icon": "&#59132;",
+      "url": "",
+      "children": [
+        {
+          "id": 21,
+          "name": "音频文件",
+          "icon": "",
+          "url": "./pages/attachment/attachlist.html?filetype=audio"
+        },
+        {
+          "id": 22,
+          "name": "视频文件",
+          "icon": "",
+          "url": "./pages/attachment/attachlist.html?filetype=video"
+        },
+        {
+          "id": 23,
+          "name": "图片文件",
+          "icon": "",
+          "url": "./pages/attachment/attachlist.html?filetype=image"
+        },
+        {
+          "id": 24,
+          "name": "zip升级文件",
+          "icon": "",
+          "url": "./pages/attachment/attachlist.html?filetype=zip"
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "name": "日志数据",
+      "icon": "&#59132;",
+      "url": "",
+      "children": [
+        {
+          "id": 26,
+          "name": "登录日志",
+          "icon": "",
+          "url": "./pages/logdata/loginlog.html"
+        },
+        {
+          "id": 27,
+          "name": "操作日志",
+          "icon": "",
+          "url": "./pages/logdata/actionlog.html"
+        },
+        {
+          "id": 28,
+          "name": "任务历史",
+          "icon": "",
+          "url": "./pages/task/taskhistory.html"
+        }
+      ]
+    },
+    {
+      "id": 29,
+      "name": "系统设置",
+      "icon": "&#59132;",
+      "url": "",
+      "children": [
+        {
+          "id": 30,
+          "name": "用户管理",
+          "icon": "",
+          "url": "./pages/system/userlist.html"
+        },
+        {
+          "id": 31,
+          "name": "终端升级",
+          "icon": "",
+          "url": "./pages/system/terminal_update.html"
+        },
+        {
+          "id": 32,
+          "name": "服务器升级",
+          "icon": "",
+          "url": "./pages/system/server_update.html"
+        },
+        {
+          "id": 33,
+          "name": "第三方服务器",
+          "icon": "",
+          "url": "./pages/system/extend_server.html"
+        }
+      ]
+    }
+  ]
+}

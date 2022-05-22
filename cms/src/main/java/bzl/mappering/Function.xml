@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  -->
+<mapper namespace="Function">
+<resultMap id="FunctionResult" type="java.util.HashMap">
+	<result column="id" property="id" jdbcType="INTEGER"/>
+	<result column="fun_id" property="fun_id" jdbcType="VARCHAR"/>
+	<result column="fun_name" property="fun_name" jdbcType="VARCHAR"/>
+	<result column="fun_level" property="fun_level" jdbcType="SMALLINT"/>
+	<result column="fun_order" property="fun_order" jdbcType="SMALLINT"/>
+	<result column="fun_url" property="fun_url" jdbcType="CHAR"/>
+	<result column="parent_fun_url" property="parent_fun_url" jdbcType="VARCHAR"/>
+	<result column="fun_type" property="fun_type" jdbcType="SMALLINT"/>
+	<result column="update_time" property="update_time" jdbcType="TIMESTAMP"/>
+</resultMap>
+<resultMap id="FunctionResultEntity" type="bzl.entity.Function">
+	<result column="id" property="id" jdbcType="INTEGER"/>
+	<result column="fun_id" property="fun_id" jdbcType="VARCHAR"/>
+	<result column="fun_name" property="fun_name" jdbcType="VARCHAR"/>
+	<result column="fun_level" property="fun_level" jdbcType="SMALLINT"/>
+	<result column="fun_order" property="fun_order" jdbcType="SMALLINT"/>
+	<result column="fun_url" property="fun_url" jdbcType="CHAR"/>
+	<result column="parent_fun_url" property="parent_fun_url" jdbcType="VARCHAR"/>
+	<result column="fun_type" property="fun_type" jdbcType="SMALLINT"/>
+	<result column="update_time" property="update_time" jdbcType="TIMESTAMP"/>
+</resultMap>
+<parameterMap id="FunctionParam" type="java.util.HashMap">
+</parameterMap>
+<parameterMap id="FunctionEntity" type="bzl.entity.Function">
+</parameterMap>
+<sql id="mysql">
+	id,fun_id,fun_name,fun_level,fun_order,fun_url,parent_fun_url,fun_type,update_time
+</sql>
+<select id="selectByPK" parameterMap="FunctionParam"
+resultMap="FunctionResult">
+  	 	select <include refid="mysql"/> from t_function where  id = #{id}
+</select>
+<select id="selectAll" resultMap="FunctionResult">
+  	select <include refid="mysql"/> from t_function
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+</select>
+<!-- 动态查询 -->
+<select id="selectByCondition" parameterMap="FunctionParam" resultMap="FunctionResult">
+	select <include refid="mysql"/> from t_function
+		<include refid="sqlwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+</select>
+<!-- 动态sql -->
+<select id="selectCountByCondition" parameterMap="FunctionParam" resultType="java.util.HashMap">
+	select count(1) count from t_function
+	<include refid="sqlwhere"/>
+</select>
+<!-- 动态获得本页统计 -->
+<select id="selectPageCountByCondition" parameterMap="FunctionParam" resultType="java.util.HashMap">
+	select count(1) count from t_function
+	<include refid="sqlwhere"/>
+	limit ${startrom},${pagesize}
+	</select>
+<!-- 动态分页sql -->
+<select id="selectByConditionWithPage" parameterMap="FunctionParam" resultMap="FunctionResult">
+	select <include refid="mysql"/> from t_function
+	<include refid="sqlwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+		</if>
+	<if test="order != null">
+			${order}
+	</if>
+	limit ${startrom},${pagesize}
+</select>
+<!-- 动态统计已删除记录-->
+<select id="selectDelCountByCondition" parameterMap="FunctionParam" resultType="java.util.HashMap">
+	select count(1) count from t_function
+	<include refid="delwhere"/>
+</select>
+<!-- 动态查询已删除记录分页-->
+<select id="selectDelByConditionWithPage" parameterMap="FunctionParam" resultMap="FunctionResult">
+	select <include refid="mysql"/> from t_function
+	<include refid="delwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+	limit ${startrom},${pagesize}
+</select>
+<insert id="insert" parameterMap="FunctionParam" useGeneratedKeys="true">
+<![CDATA[
+      insert into t_function(fun_id,fun_name,fun_level,fun_order,fun_url,parent_fun_url,fun_type) values(#{fun_id},#{fun_name},#{fun_level},#{fun_order},#{fun_url},#{parent_fun_url},#{fun_type})
+    ]]>
+</insert>
+<delete id="delete" parameterMap="FunctionParam">
+  <![CDATA[
+    delete from t_function where id = #{id}
+  ]]>
+</delete>
+<!-- 批量删除 -->
+<delete id="deleteBat" parameterMap="FunctionParam">
+    delete from t_function where
+     	id in 
+		<foreach item="item" index="index" collection="id"  open="(" separator="," close=")">
+	      #{item}
+ 	 </foreach>
+ </delete>
+<!-- 动态更新 -->
+<update id="update"  parameterMap="FunctionParam">
+	update t_function 
+	<set>
+		<if test="fun_id != null">
+			fun_id = #{fun_id},
+		</if>
+		<if test="fun_name != null">
+			fun_name = #{fun_name},
+		</if>
+		<if test="fun_level != null">
+			fun_level = #{fun_level},
+		</if>
+		<if test="fun_order != null">
+			fun_order = #{fun_order},
+		</if>
+		<if test="fun_url != null">
+			fun_url = #{fun_url},
+		</if>
+		<if test="parent_fun_url != null">
+			parent_fun_url = #{parent_fun_url},
+		</if>
+		<if test="fun_type != null">
+			fun_type = #{fun_type},
+		</if>
+	</set>
+	where id = #{id}
+</update>
+<sql id="sqlwhere">
+	<where>
+		<if test="fun_id != null">
+			 and fun_id = #{fun_id}
+		</if>
+		<if test="fun_name != null">
+			 and fun_name = #{fun_name}
+		</if>
+		<if test="fun_level != null">
+			 and fun_level = #{fun_level}
+		</if>
+		<if test="fun_order != null">
+			 and fun_order = #{fun_order}
+		</if>
+		<if test="fun_url != null">
+			and fun_url = #{fun_url}
+		</if>
+		<if test="parent_fun_url != null">
+			 and parent_fun_url = #{parent_fun_url}
+		</if>
+		<if test="fun_type != null">
+			 and fun_type = #{fun_type}
+		</if>
+	</where>
+</sql>
+<sql id="delwhere">
+	<where>
+		<if test="fun_id != null">
+			 and fun_id = #{fun_id}
+		</if>
+		<if test="fun_name != null">
+			 and fun_name = #{fun_name}
+		</if>
+		<if test="fun_level != null">
+			 and fun_level = #{fun_level}
+		</if>
+		<if test="fun_order != null">
+			 and fun_order = #{fun_order}
+		</if>
+		<if test="fun_url != null">
+			fun_url = #{fun_url},
+		</if>
+		<if test="parent_fun_url != null">
+			 and parent_fun_url = #{parent_fun_url}
+		</if>
+		<if test="fun_type != null">
+			 and fun_type = #{fun_type}
+		</if>
+	 </where>
+</sql>
+<!-- 验证唯一 -->
+<select id="judgeonly" parameterMap="FunctionParam" resultType="java.util.HashMap">
+	select distinct if(exists(select id from t_function
+	<where>
+		<if test="fun_id != null">
+			 fun_id = #{fun_id}
+		</if>
+	</where>
+	
+	),1,0) as flag from t_function
+</select>
+
+</mapper>

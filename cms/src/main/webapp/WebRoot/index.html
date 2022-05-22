@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>博爻科技公司数字化多媒体系统</title>
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+		<link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
+		<link rel="stylesheet" href="./static/css/font.css">
+		<link rel="stylesheet" href="./static/css/weadmin.css">
+		<link rel="stylesheet" href="./static/css/common.css">
+		<script type="text/javascript" src="./lib/layui/layui.js" charset="utf-8"></script>
+		<script type="text/javascript" src="./static/js/server_api.js" charset="utf-8">  </script>
+
+	</head>
+
+	<body style="display: none;">
+		<!-- 顶部开始 -->
+		<div class="container">
+			<div class="bylogo">
+				<div style="display:flex;flex-direction: row;justify-content:center;align-items:center;color:white;font-size:18px;">
+					<img src="./static/images/logo.png"  width="45" height="32">
+					博爻科技公司数字化多媒体系统
+					<div class="left_open horizon-margin">
+						<!-- <i title="展开左侧栏" class="iconfont">&#xe699;</i> -->
+						<i title="展开左侧栏" class="layui-icon layui-icon-shrink-right"></i>
+					</div>
+				</div>
+				<div class="colum-center">
+					<ul class="layui-nav right" lay-filter="">
+						<li class="layui-nav-item">
+							<a id="topUserName" href="javascript:;" style="font-size:18px;"></a>
+							<dl class="layui-nav-child">
+								<!-- 二级菜单 -->
+								<dd>
+									<a onclick="modifyUserInfo();" style="font-size: 14px;">用户信息</a>
+								</dd>
+								<dd>
+									<a class="loginout" onclick="loginOut();" style="font-size: 14px;">退出</a>
+								</dd>
+							</dl>
+						</li>
+					</ul>
+				</div>
+				<!--<a href="./index.html"></a>-->
+			</div>
+		</div>
+		<!-- 顶部结束 -->
+		<!-- 中部开始 -->
+		<!-- 左侧菜单开始 -->
+		<div class="layui-col-xs layui-col-sm layui-col-md left-nav">
+			<div id="side-nav"></div>
+		</div>
+		 <div class="x-slide_left"></div>
+		<!-- 左侧菜单结束 -->
+		<!-- 右侧主体开始 -->
+		<div class="page-content">
+			<div class="layui-tab tab" lay-filter="wenav_tab" id="WeTabTip" lay-allowclose="true">
+				<ul class="layui-tab-title" id="tabName">
+					<li>定时任务</li>
+				</ul>
+				<div class="layui-tab-content">
+					<div class="layui-tab-item layui-show">
+						<iframe src='./pages/task/tasklist.html' frameborder="0" scrolling="yes" class="weIframe"></iframe>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!--<div class="page-content-bg"></div>-->
+		<!-- 右侧主体结束 -->
+		<!-- 中部结束 -->
+		<!-- 底部开始 -->
+		<div class="footer">
+			<div class="copyright"></div>
+		</div>
+		<!-- 底部结束 -->
+		<script type="text/javascript">
+			layui.config({
+				base: './static/js/'
+				,version: '101100'
+			}).extend({ //设定模块别名
+				admin: 'admin'
+				,menu: 'menu'
+				,server_api:"server_api"
+			});
+			layui.use(['jquery', 'admin', 'menu',"server_api"], function(){
+				var $ = layui.jquery,
+					//admin = layui.admin,
+					menu = layui.menu,
+                server_api = layui.server_api;
+				var theWebSocket =null;
+				window.loginOut = function(){
+                    layer.confirm('是否真的退出?', {icon: 3, title:'提示'}, function(index){
+                        server_api.userLogout(null,function (resp) {
+                            window.location.href='./login.html';
+                        })
+                    })
+				}
+
+				window.modifyUserInfo = function(){
+                    layer.open({
+                        type: 2,
+                        shade: 0.5,
+                        shadeClose: true,
+                        title: "查看和修改用户信息", //不显示标题
+                        closeBtn: 1,
+                        resize: false,
+                        area: ['90%', '80%'],
+                        content: "./pages/system/userlist.html", //捕获的元素，注意：最好该指定的元素要存放在body最外层，否则可能被其它的相对元素所影响
+                        yes: function (index, layero) {
+                            //do something
+                            console.log("run into yes!")
+                        },
+                        cancel: function () {
+
+                        }
+                    });
+				}
+
+                window.getWebSocketConnect=function() {
+                    if(theWebSocket!=null){
+                        return theWebSocket
+                    }
+                    if ("WebSocket" in window) {
+                        var wsUrl = "ws://" + window.location.host + "/cms/websocket.do";
+                        var ws = new WebSocket(wsUrl);
+                        theWebSocket = ws;
+                        ws.onopen = function () {
+                            console.log('连接成功:' + wsUrl);
+                        };
+                        ws.onmessage = function (evt) {
+                            console.log(evt.data)
+                            var resp = JSON.parse(evt.data)
+							if(resp.cmd==2){
+                                //layer.msg("evt.data.status:" + resp.status,{icon:0})
+                                layer.confirm(resp.body.content,{icon: 3, title:resp.body.title},function (index) {
+                                    //window.location.href='./pages/terminal_help/terHelp.html';
+                                    window.WeAdminShow("求助列表",'./pages/terminal_help/terHelp.html')
+									layer.close(index)
+                                })
+                            }
+                        };
+                        ws.onerror = function (event) {
+                            console.log("ws on err!")
+                            console.log(event)
+                        };
+                        ws.onclose = function () {
+                            console.log("断开了连接" + wsUrl);
+                        };
+                        return theWebSocket;
+                    } else {
+                        console.log("浏览器不支持WebSocket");
+                    }
+                },
+                window.closeWebSocket=function(){
+                    if(theWebSocket){
+                        theWebSocket.close()
+                        theWebSocket=null
+                    }
+                },
+
+				$(function(){
+                    menu.getMenu('./json/menu.json');
+                    var myDate = new Date();
+                    var tYear = myDate.getFullYear();
+                    var tYear1 = tYear -1;
+
+                    var copyrightText = "Copyright ©" +tYear1 + "-" + tYear +  " 贵阳博爻科技 All Rights Reserved"
+
+                    $(".copyright").text(copyrightText)
+                    server_api.getUserInfo(null,function (resp) {
+                        if(resp.status==0){
+                            $("#topUserName").html(resp.result[0].username)
+							$("body").css("display","block")
+                            window.getWebSocketConnect()
+						}else{
+                            //window.location.href='./login.html';
+							console.log("go to login !!!!")
+						}
+                    })
+				});
+			});
+
+		</script>
+	</body>
+	<!--Tab菜单右键弹出菜单-->
+	<ul class="rightMenu" id="rightMenu">
+        <li data-type="fresh">刷新</li>
+        <li data-type="current">关闭当前</li>
+        <li data-type="other">关闭其它</li>
+        <li data-type="all">关闭所有</li>
+    </ul>
+
+</html>

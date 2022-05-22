@@ -1,0 +1,450 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  -->
+<mapper namespace="Val">
+<resultMap id="ValResult" type="java.util.HashMap">
+	<result column="id" property="id" jdbcType="VARCHAR"/>
+	<result column="val" property="val" jdbcType="VARCHAR"/>
+	<result column="valname" property="valname" jdbcType="VARCHAR"/>
+	<result column="status" property="status" jdbcType="INTEGER"/>
+	<result column="audistatus" property="audistatus" jdbcType="INTEGER"/>
+	<result column="syncstatus" property="syncstatus" jdbcType="INTEGER"/>
+	<result column="deletestatus" property="deletestatus" jdbcType="INTEGER"/>
+	<result column="updateuserid" property="updateuserid" jdbcType="VARCHAR"/>
+	<result column="updatetime" property="updatetime" jdbcType="TIMESTAMP"/>
+	<result column="adduserid" property="adduserid" jdbcType="VARCHAR"/>
+	<result column="addtime" property="addtime" jdbcType="TIMESTAMP"/>
+	<result column="audiuserid" property="audiuserid" jdbcType="VARCHAR"/>
+	<result column="auditime" property="auditime" jdbcType="TIMESTAMP"/>
+	<result column="useduserid" property="useduserid" jdbcType="VARCHAR"/>
+	<result column="usedtime" property="usedtime" jdbcType="TIMESTAMP"/>
+	<result column="orgid" property="orgid" jdbcType="VARCHAR"/>
+</resultMap>
+<resultMap id="ValResultEntity" type="bzl.entity.Val">
+	<result column="id" property="id" jdbcType="VARCHAR"/>
+	<result column="val" property="val" jdbcType="VARCHAR"/>
+	<result column="valname" property="valname" jdbcType="VARCHAR"/>
+	<result column="status" property="status" jdbcType="INTEGER"/>
+	<result column="audistatus" property="audistatus" jdbcType="INTEGER"/>
+	<result column="syncstatus" property="syncstatus" jdbcType="INTEGER"/>
+	<result column="deletestatus" property="deletestatus" jdbcType="INTEGER"/>
+	<result column="updateuserid" property="updateuserid" jdbcType="VARCHAR"/>
+	<result column="updatetime" property="updatetime" jdbcType="TIMESTAMP"/>
+	<result column="adduserid" property="adduserid" jdbcType="VARCHAR"/>
+	<result column="addtime" property="addtime" jdbcType="TIMESTAMP"/>
+	<result column="audiuserid" property="audiuserid" jdbcType="VARCHAR"/>
+	<result column="auditime" property="auditime" jdbcType="TIMESTAMP"/>
+	<result column="useduserid" property="useduserid" jdbcType="VARCHAR"/>
+	<result column="usedtime" property="usedtime" jdbcType="TIMESTAMP"/>
+	<result column="orgid" property="orgid" jdbcType="VARCHAR"/>
+</resultMap>
+<parameterMap id="ValParam" type="java.util.HashMap">
+</parameterMap>
+<parameterMap id="ValEntity" type="bzl.entity.Val">
+</parameterMap>
+<sql id="mysql">
+	id,val,valname,status,audistatus,syncstatus,deletestatus,updateuserid,updatetime,adduserid,addtime,audiuserid,auditime,useduserid,usedtime,orgid
+</sql>
+<select id="selectByPK" parameterMap="ValParam"
+resultMap="ValResult">
+  	 	select <include refid="mysql"/> from t_s_val where deletestatus=0 and id = #{id}
+</select>
+<select id="selectAll" resultMap="ValResult">
+  	select <include refid="mysql"/> from t_s_val where deletestatus=0
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+</select>
+<!-- 动态查询 -->
+<select id="selectByCondition" parameterMap="ValParam" resultMap="ValResult">
+	select <include refid="mysql"/> from t_s_val
+		<include refid="sqlwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+</select>
+<!-- 动态sql -->
+<select id="selectCountByCondition" parameterMap="ValParam" resultType="java.util.HashMap">
+	select count(1) count from t_s_val
+	<include refid="sqlwhere"/>
+</select>
+<!-- 动态获得本页统计 -->
+<select id="selectPageCountByCondition" parameterMap="ValParam" resultType="java.util.HashMap">
+	select count(1) count from t_s_val
+	<include refid="sqlwhere"/>
+	limit ${startrom},${pagesize}
+	</select>
+<!-- 动态分页sql -->
+<select id="selectByConditionWithPage" parameterMap="ValParam" resultMap="ValResult">
+	select <include refid="mysql"/> from t_s_val
+	<include refid="sqlwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+		</if>
+	<if test="order != null">
+			${order}
+	</if>
+	limit ${startrom},${pagesize}
+</select>
+<!-- 动态分页sql为list显示专用 -->
+<select id="selectWithPageForList" parameterMap="ValParam" resultMap="ValResult">
+	select t.id,t.val,t.valname,t.status,t.audistatus,t.syncstatus,t.deletestatus,updateuser.realname updateuserid,t.updatetime,adduser.realname adduserid,t.addtime,auduser.realname audiuserid,t.auditime,useduser.realname useduserid,t.usedtime,t.orgid from t_s_val t
+left join t_s_user updateuser on t.updateuserid=updateuser.id
+left join t_s_user adduser on t.adduserid=adduser.id
+left join t_s_user auduser on t.audiuserid=auduser.id
+left join t_s_user useduser on t.useduserid=useduser.id
+	<include refid="sqllistwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+		</if>
+	<if test="order != null">
+			${order}
+	</if>
+	limit ${startrom},${pagesize}
+</select>
+<!-- 动态统计已删除记录-->
+<select id="selectDelCountByCondition" parameterMap="ValParam" resultType="java.util.HashMap">
+	select count(1) count from t_s_val
+	<include refid="delwhere"/>
+</select>
+<!-- 动态查询已删除记录分页-->
+<select id="selectDelByConditionWithPage" parameterMap="ValParam" resultMap="ValResult">
+	select <include refid="mysql"/> from t_s_val
+	<include refid="delwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+	limit ${startrom},${pagesize}
+</select>
+<insert id="insert" parameterMap="ValParam">
+      insert into t_s_val(id,
+	<if test="val != null">
+		val,
+	</if>
+	<if test="valname != null">
+		valname,
+	</if>
+	<if test="status != null">
+		status,
+	</if>
+	<if test="audistatus != null">
+		audistatus,
+	</if>
+	<if test="adduserid != null">
+		adduserid,
+	</if>
+	<if test="audiuserid != null">
+		audiuserid,
+	</if>
+	<if test="auditime != null">
+		auditime,
+	</if>
+	<if test="useduserid != null">
+		useduserid,
+	</if>
+	<if test="usedtime != null">
+		usedtime,
+	</if>
+	<if test="orgid != null">
+		orgid,
+	</if>
+addtime) values((select REPLACE(uuid(),'-','')),
+	<if test="val != null">
+		#{val},
+	</if>
+	<if test="valname != null">
+		#{valname},
+	</if>
+	<if test="status != null">
+		#{status},
+	</if>
+	<if test="audistatus != null">
+		#{audistatus},
+	</if>
+	<if test="adduserid != null">
+		#{adduserid},
+	</if>
+	<if test="audiuserid != null">
+		#{audiuserid},
+	</if>
+	<if test="auditime != null">
+		str_to_date(#{auditime},'%m/%d/%Y %H:%i:%s'),
+	</if>
+	<if test="useduserid != null">
+		#{useduserid},
+	</if>
+	<if test="usedtime != null">
+		str_to_date(#{usedtime},'%m/%d/%Y %H:%i:%s'),
+	</if>
+	<if test="orgid != null">
+		#{orgid},
+	</if>
+now())
+</insert>
+<delete id="delete" parameterMap="ValParam">
+  <![CDATA[
+    delete from t_s_val where id = #{id}
+  ]]>
+</delete>
+<!-- 批量删除 -->
+<delete id="deleteBat" parameterMap="ValParam">
+    delete from t_s_val where
+     	id in 
+		<foreach item="item" index="index" collection="id"  open="(" separator="," close=")">
+	      #{item}
+ 	 </foreach>
+ </delete>
+<!-- 批量伪删除 -->
+<update id="updateStatus"  parameterMap="ValParam">
+    <foreach collection="id" item="item" index="index" open="" close="" separator=";">
+		update t_s_val 
+		<set>
+		<if test="status != null">
+			status = #{status},useduserid=#{useduserid},usedtime=now(),
+		</if>
+		<if test="deletestatus != null">
+			deletestatus = #{deletestatus},
+		</if>
+		<if test="audistatus != null">
+			audistatus = #{audistatus},audiuserid=#{audiuserid},auditime=now(),
+		</if>
+		<if test="syncstatus != null">
+			syncstatus = #{syncstatus},
+		</if>
+		</set>
+		where id = #{item}
+   </foreach>
+ </update>
+<!-- 动态更新 -->
+<update id="update"  parameterMap="ValParam">
+	update t_s_val 
+	<set>
+		<if test="val != null">
+			val = #{val},
+		</if>
+		<if test="valname != null">
+			valname = #{valname},
+		</if>
+		<if test="status != null">
+			status = #{status},
+		</if>
+		<if test="audistatus != null">
+			audistatus = #{audistatus},
+		</if>
+		<if test="syncstatus != null">
+			syncstatus = #{syncstatus},
+		</if>
+		<if test="deletestatus != null">
+			deletestatus = #{deletestatus},
+		</if>
+		<if test="updateuserid != null">
+			updateuserid = #{updateuserid},
+		</if>
+		<if test="updatetime != null">
+			updatetime = now(),
+		</if>
+		<if test="adduserid != null">
+			adduserid = #{adduserid},
+		</if>
+		<if test="addtime != null">
+			addtime = str_to_date(#{addtime},'%m/%d/%Y %H:%i:%s'),
+		</if>
+		<if test="audiuserid != null">
+			audiuserid = #{audiuserid},
+		</if>
+		<if test="auditime != null">
+			auditime = str_to_date(#{auditime},'%m/%d/%Y %H:%i:%s'),
+		</if>
+		<if test="useduserid != null">
+			useduserid = #{useduserid},
+		</if>
+		<if test="usedtime != null">
+			usedtime = str_to_date(#{usedtime},'%m/%d/%Y %H:%i:%s'),
+		</if>
+		<if test="orgid != null">
+			orgid = #{orgid},
+		</if>
+		id=id 
+	</set>
+	where id = #{id}
+</update>
+<sql id="sqlwhere">
+	<where>
+		 deletestatus=0
+		<if test="id != null">
+			 and id = #{id}
+		</if>
+		<if test="val != null">
+			 and val = #{val}
+		</if>
+		<if test="valname != null">
+			 and valname = #{valname}
+		</if>
+		<if test="status != null">
+			 and status = #{status}
+		</if>
+		<if test="audistatus != null">
+			 and audistatus = #{audistatus}
+		</if>
+		<if test="syncstatus != null">
+			 and syncstatus = #{syncstatus}
+		</if>
+		<if test="updateuserid != null">
+			 and updateuserid = #{updateuserid}
+		</if>
+		<if test="updatetime != null">
+			 and updatetime = #{updatetime}
+		</if>
+		<if test="adduserid != null">
+			 and adduserid = #{adduserid}
+		</if>
+		<if test="addtime != null">
+			 and addtime = #{addtime}
+		</if>
+		<if test="audiuserid != null">
+			 and audiuserid = #{audiuserid}
+		</if>
+		<if test="auditime != null">
+			 and auditime = #{auditime}
+		</if>
+		<if test="useduserid != null">
+			 and useduserid = #{useduserid}
+		</if>
+		<if test="usedtime != null">
+			 and usedtime = #{usedtime}
+		</if>
+		<if test="orgid != null">
+			 and orgid = #{orgid}
+		</if>
+<if test="rootid != null and rootid !=''">
+    and orgid in 
+<foreach item="item" index="index" collection="rootid"  open="(" separator="," close=")">
+ 	 #{item}
+</foreach>
+</if>
+	</where>
+</sql>
+<sql id="sqllistwhere">
+	<where>
+		 t.deletestatus=0
+		<if test="id != null">
+			 and t.id = #{id}
+		</if>
+		<if test="val != null">
+			 and t.val = #{val}
+		</if>
+		<if test="valname != null">
+			 and t.valname = #{valname}
+		</if>
+		<if test="status != null">
+			 and t.status = #{status}
+		</if>
+		<if test="audistatus != null">
+			 and t.audistatus = #{audistatus}
+		</if>
+		<if test="syncstatus != null">
+			 and t.syncstatus = #{syncstatus}
+		</if>
+		<if test="updateuserid != null">
+			 and t.updateuserid = #{updateuserid}
+		</if>
+		<if test="updatetime != null">
+			 and t.updatetime = #{updatetime}
+		</if>
+		<if test="adduserid != null">
+			 and t.adduserid = #{adduserid}
+		</if>
+		<if test="addtime != null">
+			 and t.addtime = #{addtime}
+		</if>
+		<if test="audiuserid != null">
+			 and t.audiuserid = #{audiuserid}
+		</if>
+		<if test="auditime != null">
+			 and t.auditime = #{auditime}
+		</if>
+		<if test="useduserid != null">
+			 and t.useduserid = #{useduserid}
+		</if>
+		<if test="usedtime != null">
+			 and t.usedtime = #{usedtime}
+		</if>
+		<if test="orgid != null">
+			 and t.orgid = #{orgid}
+		</if>
+<if test="rootid != null and rootid !=''">
+    and t.orgid in 
+<foreach item="item" index="index" collection="rootid"  open="(" separator="," close=")">
+ 	 #{item}
+</foreach>
+</if>
+	</where>
+</sql>
+<sql id="delwhere">
+	<where>
+	 	deletestatus=1
+		<if test="id != null">
+			 and id = #{id}
+		</if>
+		<if test="val != null">
+			 and val = #{val}
+		</if>
+		<if test="valname != null">
+			 and valname = #{valname}
+		</if>
+		<if test="status != null">
+			 and status = #{status}
+		</if>
+		<if test="audistatus != null">
+			 and audistatus = #{audistatus}
+		</if>
+		<if test="syncstatus != null">
+			 and syncstatus = #{syncstatus}
+		</if>
+		<if test="updateuserid != null">
+			 and updateuserid = #{updateuserid}
+		</if>
+		<if test="updatetime != null">
+			 and updatetime = #{updatetime}
+		</if>
+		<if test="adduserid != null">
+			 and adduserid = #{adduserid}
+		</if>
+		<if test="addtime != null">
+			 and addtime = #{addtime}
+		</if>
+		<if test="audiuserid != null">
+			 and audiuserid = #{audiuserid}
+		</if>
+		<if test="auditime != null">
+			 and auditime = #{auditime}
+		</if>
+		<if test="useduserid != null">
+			 and useduserid = #{useduserid}
+		</if>
+		<if test="usedtime != null">
+			 and usedtime = #{usedtime}
+		</if>
+		<if test="orgid != null">
+			 and orgid = #{orgid}
+		</if>
+<if test="rootid != null and rootid !=''">
+    and orgid in 
+<foreach item="item" index="index" collection="rootid"  open="(" separator="," close=")">
+ 	 #{item}
+</foreach>
+</if>
+	 </where>
+</sql>
+</mapper>

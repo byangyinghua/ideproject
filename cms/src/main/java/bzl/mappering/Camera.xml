@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- -->
+<mapper namespace="Camera">
+	<resultMap id="CameraResult" type="java.util.HashMap">
+		<result column="id" property="id" jdbcType="BIGINT" />
+		<result column="camera_id" property="camera_id"
+			jdbcType="VARCHAR" />
+		<result column="camera_ip" property="camera_ip"
+			jdbcType="VARCHAR" />
+		<result column="channel" property="channel" jdbcType="VARCHAR" />
+		<result column="terminal_id" property="terminal_id"
+			jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="install_addr" property="install_addr"
+			jdbcType="VARCHAR" />
+		<result column="brand" property="brand" jdbcType="VARCHAR" />
+		<result column="create_time" property="create_time"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+	<resultMap id="CameraResultEntity" type="bzl.entity.Camera">
+		<result column="id" property="id" jdbcType="BIGINT" />
+		<result column="camera_id" property="camera_id"
+			jdbcType="VARCHAR" />
+		<result column="camera_ip" property="camera_ip"
+			jdbcType="VARCHAR" />
+		<result column="channel" property="channel" jdbcType="VARCHAR" />
+		<result column="terminal_id" property="terminal_id"
+			jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="install_addr" property="install_addr"
+			jdbcType="VARCHAR" />
+		<result column="brand" property="brand" jdbcType="VARCHAR" />
+		<result column="create_time" property="create_time"
+			jdbcType="TIMESTAMP" />
+	</resultMap>
+	<parameterMap id="CameraParam" type="java.util.HashMap">
+	</parameterMap>
+	<parameterMap id="CameraEntity" type="bzl.entity.Camera">
+	</parameterMap>
+	<sql id="mysql">
+		id,camera_id,camera_ip,channel,terminal_id,name,install_addr,brand,create_time
+	</sql>
+	<select id="selectByPK" parameterMap="CameraParam"
+		resultMap="CameraResult">
+		select
+		<include refid="mysql" />
+		from t_camera where camera_id = #{camera_id}
+	</select>
+	<select id="selectAll" resultMap="CameraResult">
+		select
+		<include refid="mysql" />
+		from t_camera
+		<if test="sort != null">
+			order by ${sort}
+		</if>
+		<if test="order != null">
+			${order}
+		</if>
+	</select>
+	<!-- 动态查询 -->
+	<select id="selectByCondition" parameterMap="CameraParam"
+		resultMap="CameraResult">
+		select
+		<include refid="mysql" />
+		from t_camera
+		<include refid="sqlwhere" />
+		<if test="sort != null">
+			order by ${sort}
+		</if>
+		<if test="order != null">
+			${order}
+		</if>
+	</select>
+	<!-- 动态sql -->
+	<select id="selectCountByCondition" parameterMap="CameraParam"
+		resultType="java.util.HashMap">
+		select count(1) count from t_camera
+		<include refid="sqlwhere" />
+	</select>
+	<!-- 动态获得本页统计 -->
+	<select id="selectPageCountByCondition"
+		parameterMap="CameraParam" resultType="java.util.HashMap">
+		select count(1) count from t_camera
+		<include refid="sqlwhere" />
+		limit ${startrom},${pagesize}
+	</select>
+	<!-- 动态分页sql -->
+	<select id="selectByConditionWithPage"
+		parameterMap="CameraParam" resultMap="CameraResult">
+		select
+		<include refid="mysql" />
+		from t_camera
+		<include refid="sqlwhere" />
+		<if test="sort != null">
+			order by ${sort}
+		</if>
+		<if test="order != null">
+			${order}
+		</if>
+		limit ${startrom},${pagesize}
+	</select>
+	<!-- 动态统计已删除记录 -->
+	<select id="selectDelCountByCondition"
+		parameterMap="CameraParam" resultType="java.util.HashMap">
+		select count(1) count from t_camera
+		<include refid="sqlwhere" />
+	</select>
+	<!-- 动态查询已删除记录分页 -->
+	<select id="selectDelByConditionWithPage"
+		parameterMap="CameraParam" resultMap="CameraResult">
+		select
+		<include refid="mysql" />
+		from t_camera
+		<include refid="sqlwhere" />
+		<if test="sort != null">
+			order by ${sort}
+		</if>
+		<if test="order != null">
+			${order}
+		</if>
+		limit ${startrom},${pagesize}
+	</select>
+	<insert id="insert" parameterMap="CameraParam"
+		useGeneratedKeys="true">
+<![CDATA[
+      insert into t_camera(camera_id,camera_ip,channel,terminal_id,name,install_addr,brand,create_time) values(#{camera_id},#{camera_ip},#{channel},#{terminal_id},#{name},#{install_addr},#{brand},#{create_time})
+    ]]>
+	</insert>
+	<delete id="delete" parameterMap="CameraParam">
+  <![CDATA[
+    delete from t_camera where camera_id = #{camera_id}
+  ]]>
+	</delete>
+		<delete id="deleteByChannel" parameterMap="CameraParam">
+  <![CDATA[
+    delete from t_camera where terminal_id = #{terminal_id} AND camera_ip = #{camera_ip} AND channel = #{channel}
+  ]]>
+	</delete>
+	<!-- 批量删除 -->
+	<delete id="deleteBat" parameterMap="CameraParam">
+		delete from t_camera where
+		camera_ip in
+		<foreach item="item" index="index" collection="camera_ips"
+			open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		and  terminal_id = #{terminal_id}
+	</delete>
+	<!-- 动态更新 -->
+	<update id="update" parameterMap="CameraParam">
+		update t_camera
+		<set>
+			<if test="channel != null">
+				channel = #{channel},
+			</if>
+			<if test="name != null">
+				name = #{name},
+			</if>
+			<if test="install_addr != null">
+				install_addr = #{install_addr},
+			</if>
+			<if test="brand != null">
+				brand = #{brand}
+			</if>
+		</set>
+		where camera_ip = #{camera_ip}　and terminal_id=#{terminal_id}
+	</update>
+	<sql id="sqlwhere">
+		<where>
+			<if test="camera_id != null">
+				camera_id = #{camera_id}
+			</if>
+			<if test="camera_ip != null">
+				and camera_ip = #{camera_ip}
+			</if>
+			<if test="channel != null">
+				channel = #{channel}
+			</if>
+			<if test="terminal_id != null">
+				and terminal_id = #{terminal_id}
+			</if>
+			<if test="name != null">
+				and name = #{name}
+			</if>
+			<if test="install_addr != null">
+				and install_addr = #{install_addr}
+			</if>
+			<if test="brand != null">
+				and brand = #{brand}
+			</if>
+
+			<if test="create_time != null">
+				and create_time = #{create_time}
+			</if>
+
+		</where>
+	</sql>
+	<!-- 验证唯一 -->
+	<select id="judgeonly" parameterMap="CameraParam"
+		resultType="java.util.HashMap">
+		select distinct if(exists(select id from t_camera
+		<where>
+			<if test="camera_id != null">
+				camera_id = #{camera_id}
+			</if>
+		</where>
+
+		),1,0) as flag from t_camera
+	</select>
+
+</mapper>

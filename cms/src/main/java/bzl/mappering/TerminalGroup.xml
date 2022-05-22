@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--  -->
+<mapper namespace="TerminalGroup">
+<resultMap id="TerminalGroupResult" type="java.util.HashMap">
+	<result column="id" property="id" jdbcType="INTEGER"/>
+	<result column="gid" property="gid" jdbcType="VARCHAR"/>
+	<result column="group_code" property="group_code" jdbcType="VARCHAR"/>
+	<result column="group_name" property="group_name" jdbcType="VARCHAR"/>
+	<result column="group_type" property="group_type" jdbcType="VARCHAR"/>
+	<result column="terminal_cnt" property="terminal_cnt" jdbcType="SMALLINT"/>
+	<result column="add_uid" property="add_uid" jdbcType="VARCHAR"/>
+	<result column="update_time" property="update_time" jdbcType="TIMESTAMP"/>
+</resultMap>
+<resultMap id="TerminalGroupResultEntity" type="bzl.entity.TerminalGroup">
+	<result column="id" property="id" jdbcType="INTEGER"/>
+	<result column="gid" property="gid" jdbcType="VARCHAR"/>
+	<result column="group_code" property="group_code" jdbcType="VARCHAR"/>
+	<result column="group_name" property="group_name" jdbcType="VARCHAR"/>
+	<result column="group_type" property="group_type" jdbcType="VARCHAR"/>
+	<result column="terminal_cnt" property="terminal_cnt" jdbcType="SMALLINT"/>
+	<result column="add_uid" property="add_uid" jdbcType="VARCHAR"/>
+	<result column="update_time" property="update_time" jdbcType="TIMESTAMP"/>
+</resultMap>
+<parameterMap id="TerminalGroupParam" type="java.util.HashMap">
+</parameterMap>
+<parameterMap id="TerminalGroupEntity" type="bzl.entity.TerminalGroup">
+</parameterMap>
+<sql id="mysql">
+	id,gid,group_code,group_name,group_type,terminal_cnt,add_uid,date_format(update_time,'%Y-%c-%d %H:%i:%s') AS update_time
+</sql>
+<select id="selectByPK" parameterMap="TerminalGroupParam"
+resultMap="TerminalGroupResult">
+  	 	select <include refid="mysql"/> from t_terminal_group  where gid = #{gid}
+</select>
+<select id="selectAll" resultMap="TerminalGroupResult">
+  	select <include refid="mysql"/> from t_terminal_group
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+</select>
+
+<select id="selectWithPageForList" parameterMap="TerminalGroupParam" resultMap="TerminalGroupResult">
+         select <include refid="mysql"/> from t_terminal_group
+        <if test="sort != null">
+                order by ${sort}
+                </if>
+        <if test="order != null">
+                        ${order}
+        </if>
+        limit ${startrom},${pagesize}
+</select>
+
+
+
+<!-- 动态查询 -->
+<select id="selectByCondition" parameterMap="TerminalGroupParam" resultMap="TerminalGroupResult">
+	select <include refid="mysql"/> from t_terminal_group
+		<include refid="sqlwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+</select>
+<!-- 动态sql -->
+<select id="selectCountByCondition" parameterMap="TerminalGroupParam" resultType="java.util.HashMap">
+	select count(1) count from t_terminal_group
+	<include refid="sqlwhere"/>
+</select>
+<!-- 动态获得本页统计 -->
+<select id="selectPageCountByCondition" parameterMap="TerminalGroupParam" resultType="java.util.HashMap">
+	select count(1) count from t_terminal_group
+	<include refid="sqlwhere"/>
+	limit ${startrom},${pagesize}
+	</select>
+<!-- 动态分页sql -->
+<select id="selectByConditionWithPage" parameterMap="TerminalGroupParam" resultMap="TerminalGroupResult">
+	select <include refid="mysql"/> from t_terminal_group
+	<include refid="sqlwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+		</if>
+	<if test="order != null">
+			${order}
+	</if>
+	limit ${startrom},${pagesize}
+</select>
+<!-- 动态统计已删除记录-->
+<select id="selectDelCountByCondition" parameterMap="TerminalGroupParam" resultType="java.util.HashMap">
+	select count(1) count from t_terminal_group
+	<include refid="sqlwhere"/>
+</select>
+<!-- 动态查询已删除记录分页-->
+<select id="selectDelByConditionWithPage" parameterMap="TerminalGroupParam" resultMap="TerminalGroupResult">
+	select <include refid="mysql"/> from t_terminal_group
+	<include refid="sqlwhere"/>
+	<if test="sort != null">
+		order by ${sort}
+	</if>
+	<if test="order != null">
+			${order}
+	</if>
+	limit ${startrom},${pagesize}
+</select>
+<insert id="insert" parameterMap="TerminalGroupParam" useGeneratedKeys="true">
+<![CDATA[
+      insert into t_terminal_group(gid,group_code,group_name,group_type,terminal_cnt,add_uid) values(#{gid},#{group_code},#{group_name},#{group_type},#{terminal_cnt},#{add_uid})
+    ]]>
+</insert>
+<delete id="delete" parameterMap="TerminalGroupParam">
+  <![CDATA[
+    delete from t_terminal_group where gid = #{gid}
+  ]]>
+</delete>
+<!-- 批量删除 -->
+<delete id="deleteBat" parameterMap="TerminalGroupParam">
+    delete from t_terminal_group where
+     	gid in 
+		<foreach item="item" index="index" collection="id"  open="(" separator="," close=")">
+	      #{item}
+ 	 </foreach>
+ </delete>
+<!-- 批量伪删除 -->
+<update id="updateStatus"  parameterMap="TerminalGroupParam">
+    <foreach collection="id" item="item" index="index" open="" close="" separator=";">
+		update t_terminal_group 
+		<set>
+		<if test="del_status != null">
+			del_status = #{del_status},
+		</if>
+		</set>
+		where gid = #{item}
+   </foreach>
+ </update>
+<!-- 动态更新 -->
+<update id="update"  parameterMap="TerminalGroupParam">
+	update t_terminal_group 
+	<set>
+		<if test="group_code != null">
+			group_code = #{group_code},
+		</if>
+		<if test="group_name != null">
+			group_name = #{group_name},
+		</if>
+		<if test="group_type != null">
+			group_type = #{group_type},
+		</if>
+		<if test="terminal_cnt != null">
+			terminal_cnt = #{terminal_cnt}
+		</if>
+	</set>
+	where gid = #{gid}
+</update>
+<sql id="sqlwhere">
+	<where>
+	    <if test="gid != null">
+			 gid = #{gid}
+		</if>
+		<if test="group_code != null">
+			 and group_code = #{group_code}
+		</if>
+		<if test="group_name != null">
+			 and group_name = #{group_name}
+		</if>
+		<if test="group_type != null">
+			and group_type = #{group_type}
+		</if>
+		<if test="terminal_cnt != null">
+			and terminal_cnt = #{terminal_cnt}
+		</if>
+	</where>
+</sql>
+<!-- 验证唯一 -->
+<select id="judgeonly" parameterMap="TerminalGroupParam" resultType="java.util.HashMap">
+	select distinct if(exists(select gid from t_terminal_group
+	<where>
+		<if test="group_code != null">
+			 group_code = #{group_code}
+		</if>
+	</where>
+	
+	),1,0) as flag from t_terminal_group
+</select>
+
+<select id="checkGroupCodeExists" parameterMap="TerminalGroupParam" resultType="java.util.HashMap">
+        SELECT COUNT(1) as 'count' FROM t_terminal_group WHERE group_code=#{group_code}
+</select>
+
+<select id="checkNameExists" parameterMap="TerminalGroupParam" resultType="java.util.HashMap">
+        SELECT COUNT(1) as 'count' FROM t_terminal_group WHERE group_name=#{name} AND id!=#{id}
+</select>
+
+
+
+</mapper>
